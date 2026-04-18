@@ -22,10 +22,9 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
       }
       setSmokeCandles((prev) => [...prev, ...newlyOut]);
 
-      // Clear smoke after animation completes
       setTimeout(() => {
         setSmokeCandles((prev) => prev.filter((c) => !newlyOut.includes(c)));
-      }, 1200);
+      }, 1800);
     }
     prevLitRef.current = candlesLit;
   }, [candlesLit]);
@@ -45,33 +44,53 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
 
           return (
             <div key={i} className="flex flex-col items-center relative">
-              {/* Smoke wisps — appear when candle goes out */}
+              {/* Dramatic smoke + flash — when candle goes out */}
               <AnimatePresence>
                 {showSmoke && (
                   <>
+                    {/* Flash of light where flame was */}
+                    <motion.div
+                      className="absolute -top-2 left-1/2 w-3 h-3 rounded-full"
+                      style={{ background: "rgba(255,220,100,0.9)" }}
+                      initial={{ opacity: 1, scale: 1, x: "-50%" }}
+                      animate={{ opacity: 0, scale: 3 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                    {/* Big main smoke */}
+                    <motion.div
+                      className="absolute -top-3 left-1/2 w-[5px] h-[5px] rounded-full"
+                      style={{ background: "rgba(160,160,170,0.7)" }}
+                      initial={{ opacity: 0.9, y: 0, x: "-50%", scale: 0.5 }}
+                      animate={{ opacity: 0, y: -35, x: "-20%", scale: 4 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1.2, ease: "easeOut" }}
+                    />
+                    {/* Secondary smoke — drifts left */}
+                    <motion.div
+                      className="absolute -top-3 left-1/2 w-[4px] h-[4px] rounded-full"
+                      style={{ background: "rgba(150,150,160,0.5)" }}
+                      initial={{ opacity: 0.7, y: 0, x: "-60%", scale: 0.5 }}
+                      animate={{ opacity: 0, y: -28, x: "-120%", scale: 3.5 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1, ease: "easeOut", delay: 0.08 }}
+                    />
+                    {/* Tertiary smoke — drifts right */}
                     <motion.div
                       className="absolute -top-3 left-1/2 w-[3px] h-[3px] rounded-full"
-                      style={{ background: "rgba(180,180,180,0.6)" }}
-                      initial={{ opacity: 0.8, y: 0, x: "-50%", scale: 0.5 }}
-                      animate={{ opacity: 0, y: -22, x: "-30%", scale: 2.5 }}
+                      style={{ background: "rgba(170,170,175,0.4)" }}
+                      initial={{ opacity: 0.6, y: 0, x: "-30%", scale: 0.5 }}
+                      animate={{ opacity: 0, y: -40, x: "60%", scale: 3 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 1, ease: "easeOut" }}
+                      transition={{ duration: 1.3, ease: "easeOut", delay: 0.04 }}
                     />
+                    {/* Wispy tail */}
                     <motion.div
-                      className="absolute -top-3 left-1/2 w-[2px] h-[2px] rounded-full"
-                      style={{ background: "rgba(160,160,160,0.5)" }}
-                      initial={{ opacity: 0.6, y: 0, x: "-60%", scale: 0.5 }}
-                      animate={{ opacity: 0, y: -18, x: "-80%", scale: 2 }}
+                      className="absolute -top-2 left-1/2 w-[2px] h-[2px] rounded-full"
+                      style={{ background: "rgba(180,180,185,0.3)" }}
+                      initial={{ opacity: 0.5, y: 0, x: "-45%", scale: 0.5 }}
+                      animate={{ opacity: 0, y: -50, x: "-10%", scale: 2.5 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                    />
-                    <motion.div
-                      className="absolute -top-3 left-1/2 w-[2px] h-[2px] rounded-full"
-                      style={{ background: "rgba(170,170,170,0.4)" }}
-                      initial={{ opacity: 0.5, y: 0, x: "-40%", scale: 0.5 }}
-                      animate={{ opacity: 0, y: -25, x: "10%", scale: 2 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 1.1, ease: "easeOut", delay: 0.05 }}
+                      transition={{ duration: 1.5, ease: "easeOut", delay: 0.15 }}
                     />
                   </>
                 )}

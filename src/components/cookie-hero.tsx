@@ -119,12 +119,39 @@ export function CookieHero() {
               transition={{ duration: 1.5, repeat: Infinity }}
             >
               <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]" />
-              Escuchando... ¡soplá las velas!
+              Escuchando...
             </motion.div>
 
             <p className="text-xs text-cookie-dark/40">
               {candlesLit} vela{candlesLit !== 1 ? "s" : ""} restante{candlesLit !== 1 ? "s" : ""}
             </p>
+
+            {/* Blow indicator banner */}
+            <motion.div
+              className="w-full max-w-xs flex flex-col items-center gap-1 py-3 px-4 rounded-2xl"
+              style={{ background: "rgba(232,168,56,0.1)", border: "1px solid rgba(232,168,56,0.2)" }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <motion.p
+                className="text-sm font-semibold text-cookie-dark/70"
+                animate={{ opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                ¡Soplá hacia abajo!
+              </motion.p>
+              <motion.div
+                className="text-2xl"
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+              >
+                👇
+              </motion.div>
+              <p className="text-[10px] text-cookie-dark/40">
+                Soplá en el puerto de carga
+              </p>
+            </motion.div>
 
             <button
               className="text-xs text-cookie-dark/35 underline decoration-dotted active:text-cookie-dark/55 min-h-[44px] flex items-center"
