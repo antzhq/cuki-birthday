@@ -19,6 +19,7 @@ interface BirthdayState {
   candlesLit: number;
   unlockedPhotos: number[];
   completedGames: GameId[];
+  hasVisitedGallery: boolean;
 
   setPhase: (phase: Phase) => void;
   blowCandle: () => void;
@@ -27,6 +28,7 @@ interface BirthdayState {
   completeGame: (game: GameId) => void;
   exitGame: () => void;
   relightCandles: () => void;
+  goToGallery: () => void;
 }
 
 // WHY: Each game unlocks a group of photos (indices 0-12, 13 total).
@@ -46,6 +48,7 @@ export const useBirthdayStore = create<BirthdayState>()(
       candlesLit: 18,
       unlockedPhotos: [],
       completedGames: [],
+      hasVisitedGallery: false,
 
       setPhase: (phase) => set({ phase }),
 
@@ -77,13 +80,23 @@ export const useBirthdayStore = create<BirthdayState>()(
           unlockedPhotos: updated,
           activeGame: null,
           phase: updatedGames.length === 4 ? "complete" : "gallery",
+          hasVisitedGallery: true,
         });
       },
 
       exitGame: () => set({ activeGame: null, phase: "gallery" }),
 
+      // WHY: Relight keeps all game progress — she just gets to blow again for fun
       relightCandles: () =>
         set({ candlesLit: 18, phase: "landing" }),
+
+      goToGallery: () => {
+        const { completedGames } = get();
+        set({
+          phase: completedGames.length === 4 ? "complete" : "gallery",
+          hasVisitedGallery: true,
+        });
+      },
     }),
     {
       name: "cuki-birthday-state",

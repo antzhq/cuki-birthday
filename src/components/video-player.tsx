@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { useBirthdayStore } from "@/lib/store";
 
 export function VideoPlayer() {
-  const setPhase = useBirthdayStore((s) => s.setPhase);
+  const { setPhase, relightCandles, goToGallery, hasVisitedGallery } =
+    useBirthdayStore();
 
   return (
     <motion.div
@@ -31,14 +32,23 @@ export function VideoPlayer() {
         </video>
       </div>
 
-      <motion.button
-        className="px-6 py-2 rounded-full bg-cookie-brown text-white font-medium shadow-md hover:bg-cookie-dark transition-colors"
-        onClick={() => setPhase("gallery")}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        Ir a la Galería →
-      </motion.button>
+      <div className="flex items-center gap-4">
+        <button
+          className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
+          onClick={relightCandles}
+        >
+          ← Volver a las velas
+        </button>
+
+        <motion.button
+          className="px-6 py-2 rounded-full bg-cookie-brown text-white font-medium shadow-md hover:bg-cookie-dark transition-colors"
+          onClick={goToGallery}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Ir a la Galería →
+        </motion.button>
+      </div>
     </motion.div>
   );
 }

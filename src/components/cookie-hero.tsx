@@ -7,8 +7,15 @@ import { BlowDetector } from "./blow-detector";
 import { TOTAL_CANDLES } from "@/lib/constants";
 
 export function CookieHero() {
-  const { phase, candlesLit, setPhase, blowCandle, blowAllCandles } =
-    useBirthdayStore();
+  const {
+    phase,
+    candlesLit,
+    hasVisitedGallery,
+    setPhase,
+    blowCandle,
+    blowAllCandles,
+    goToGallery,
+  } = useBirthdayStore();
 
   const handleBlow = () => {
     const toExtinguish = Math.min(candlesLit, 2 + Math.floor(Math.random() * 2));
@@ -81,14 +88,26 @@ export function CookieHero() {
       </div>
 
       {phase === "landing" && (
-        <motion.button
-          className="mt-4 px-8 py-3 rounded-full bg-cookie-brown text-white font-semibold text-lg shadow-lg hover:bg-cookie-dark transition-colors"
-          onClick={() => setPhase("blowing")}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          ¡Pedí un deseo y soplá! 🌬️
-        </motion.button>
+        <div className="flex flex-col items-center gap-3 mt-4">
+          <motion.button
+            className="px-8 py-3 rounded-full bg-cookie-brown text-white font-semibold text-lg shadow-lg hover:bg-cookie-dark transition-colors"
+            onClick={() => setPhase("blowing")}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            ¡Pedí un deseo y soplá! 🌬️
+          </motion.button>
+
+          {/* If she's already been through the flow, let her jump to gallery */}
+          {hasVisitedGallery && (
+            <button
+              className="text-sm text-cookie-dark/50 underline hover:text-cookie-dark/70"
+              onClick={goToGallery}
+            >
+              Ir a la galería →
+            </button>
+          )}
+        </div>
       )}
 
       {phase === "blowing" && (

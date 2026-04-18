@@ -7,7 +7,8 @@ import { PhotoCard } from "./photo-card";
 import { GameMenu } from "./game-menu";
 
 export function PhotoGallery() {
-  const { unlockedPhotos, completedGames } = useBirthdayStore();
+  const { unlockedPhotos, completedGames, setPhase, relightCandles } =
+    useBirthdayStore();
 
   return (
     <motion.div
@@ -16,13 +17,27 @@ export function PhotoGallery() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-cookie-dark">
-          Galería de Cuki
-        </h2>
-        <p className="text-sm text-cookie-dark/60 mt-1">
-          {unlockedPhotos.length} / {TOTAL_PHOTOS} fotos desbloqueadas
-        </p>
+      <div className="flex items-center justify-between w-full">
+        <button
+          className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
+          onClick={() => setPhase("video")}
+        >
+          ← Video
+        </button>
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-cookie-dark">
+            Galería de Cuki
+          </h2>
+          <p className="text-sm text-cookie-dark/60 mt-1">
+            {unlockedPhotos.length} / {TOTAL_PHOTOS} fotos desbloqueadas
+          </p>
+        </div>
+        <button
+          className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
+          onClick={relightCandles}
+        >
+          🕯️ Velas
+        </button>
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 w-full">

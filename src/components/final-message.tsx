@@ -6,7 +6,7 @@ import { PHOTO_FILES, PHOTO_CAPTIONS } from "@/lib/constants";
 import Image from "next/image";
 
 export function FinalMessage() {
-  const relightCandles = useBirthdayStore((s) => s.relightCandles);
+  const { relightCandles, setPhase } = useBirthdayStore();
 
   return (
     <motion.div
@@ -61,13 +61,23 @@ export function FinalMessage() {
         ))}
       </div>
 
-      <motion.button
-        className="text-sm text-cookie-dark/30 hover:text-cookie-dark/60 transition-colors"
-        onClick={relightCandles}
-        whileHover={{ scale: 1.05 }}
-      >
-        🕯️ ¿volver a encender las velas?
-      </motion.button>
+      <div className="flex flex-col items-center gap-2">
+        <motion.button
+          className="px-6 py-2 rounded-full bg-cookie-brown text-white font-medium shadow-md hover:bg-cookie-dark transition-colors"
+          onClick={relightCandles}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          🕯️ ¡Soplar las velas de nuevo!
+        </motion.button>
+
+        <button
+          className="text-sm text-cookie-dark/40 hover:text-cookie-dark/60 transition-colors"
+          onClick={() => setPhase("video")}
+        >
+          Ver el video de nuevo
+        </button>
+      </div>
     </motion.div>
   );
 }
