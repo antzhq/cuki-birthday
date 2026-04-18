@@ -11,7 +11,9 @@ interface UseBlowDetectionOptions {
 export function useBlowDetection({
   onBlow,
   enabled,
-  threshold = 120,
+  // WHY: Phone mic blowing registers as low-amplitude broadband noise.
+  // 15 is very sensitive — even a gentle blow should trigger it.
+  threshold = 15,
 }: UseBlowDetectionOptions) {
   const [micState, setMicState] = useState<"idle" | "active" | "denied">("idle");
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -20,14 +22,21 @@ export function useBlowDetection({
   const streamRef = useRef<MediaStream | null>(null);
   const onBlowRef = useRef(onBlow);
 
-  // WHY: Keep onBlow ref fresh so the RAF loop always calls the latest version
   useEffect(() => {
     onBlowRef.current = onBlow;
   }, [onBlow]);
 
   const startMic = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          // WHY: Disable noise suppression and auto gain — they filter out
+          // exactly the kind of broadband noise that blowing produces
+          noiseSuppression: false,
+          autoGainControl: false,
+          echoCancellation: false,
+        },
+      });
       streamRef.current = stream;
       const audioCtx = new AudioContext();
       const source = audioCtx.createMediaStreamSource(stream);
@@ -41,21 +50,29 @@ export function useBlowDetection({
     }
   }, []);
 
-  // Detection loop
+  // Detection loop using time-domain data (better for detecting blowing)
   useEffect(() => {
     if (!enabled || micState !== "active" || !analyserRef.current) return;
 
     const analyser = analyserRef.current;
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    const dataArray = new Uint8Array(analyser.fftSize);
 
     const detect = () => {
-      analyser.getByteFrequencyData(dataArray);
-      const average = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+      // WHY: getByteTimeDomainData gives us the raw waveform.
+      // Silence is ~128 for each sample. Blowing creates deviations.
+      // We measure the average deviation from 128 (RMS-like).
+      analyser.getByteTimeDomainData(dataArray);
+
+      let sum = 0;
+      for (let i = 0; i < dataArray.length; i++) {
+        const deviation = Math.abs(dataArray[i] - 128);
+        sum += deviation;
+      }
+      const average = sum / dataArray.length;
 
       if (average > threshold && !cooldownRef.current) {
         cooldownRef.current = true;
         onBlowRef.current();
-        // WHY: 400ms cooldown so one sustained blow doesn't extinguish everything instantly
         setTimeout(() => {
           cooldownRef.current = false;
         }, 400);
@@ -71,7 +88,6 @@ export function useBlowDetection({
     };
   }, [enabled, micState, threshold]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       streamRef.current?.getTracks().forEach((t) => t.stop());
