@@ -2,36 +2,20 @@
 
 import { useBirthdayStore } from "@/lib/store";
 import { CookieHero } from "@/components/cookie-hero";
-import { PhotoGallery } from "@/components/photo-gallery";
-import { MemoryMatch } from "@/components/games/memory-match";
-import { GuessTheYear } from "@/components/games/guess-the-year";
-import { Trivia } from "@/components/games/trivia";
-import { SlidingPuzzle } from "@/components/games/sliding-puzzle";
-import { FinalMessage } from "@/components/final-message";
+import { FloatingPhotos } from "@/components/floating-photos";
 import { Sparkles } from "@/components/sparkles";
+import { MusicPlayer } from "@/components/music-player";
 
 export default function Home() {
-  const { phase, activeGame } = useBirthdayStore();
-
-  const isCentered = phase === "landing" || phase === "blowing";
+  const { phase } = useBirthdayStore();
 
   return (
-    <div
-      className={`relative flex-1 flex flex-col ${
-        isCentered ? "items-center justify-center" : ""
-      } overflow-x-hidden`}
-    >
+    <div className="relative flex-1 flex flex-col items-center justify-center overflow-hidden">
       <Sparkles />
+      <MusicPlayer />
 
-      <main className="relative z-10 w-full max-w-md mx-auto px-5 py-6 flex flex-col items-center">
-        {(phase === "landing" || phase === "blowing") && <CookieHero />}
-        {phase === "gallery" && <PhotoGallery />}
-        {phase === "game" && activeGame === "memory" && <MemoryMatch />}
-        {phase === "game" && activeGame === "guess-year" && <GuessTheYear />}
-        {phase === "game" && activeGame === "trivia" && <Trivia />}
-        {phase === "game" && activeGame === "puzzle" && <SlidingPuzzle />}
-        {phase === "complete" && <FinalMessage />}
-      </main>
+      {phase === "cake" && <CookieHero />}
+      {phase === "photos" && <FloatingPhotos />}
     </div>
   );
 }

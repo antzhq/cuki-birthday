@@ -3,19 +3,10 @@
 import { motion } from "framer-motion";
 import { useBirthdayStore } from "@/lib/store";
 import { Candle } from "./candle";
-import { BlowDetector } from "./blow-detector";
 import { TOTAL_CANDLES } from "@/lib/constants";
 
 export function CookieHero() {
-  const {
-    phase,
-    candlesLit,
-    hasVisitedGallery,
-    setPhase,
-    blowCandle,
-    blowAllCandles,
-    goToGallery,
-  } = useBirthdayStore();
+  const { candlesLit, blowCandle, blowAllCandles } = useBirthdayStore();
 
   const handleBlow = () => {
     const toExtinguish = Math.min(candlesLit, 2 + Math.floor(Math.random() * 2));
@@ -28,12 +19,13 @@ export function CookieHero() {
 
   return (
     <motion.div
-      className="flex flex-col items-center gap-4 select-none w-full"
+      className="flex flex-col items-center gap-4 select-none w-full max-w-md mx-auto px-5"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.8, y: -50 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      {/* Title — clearly above everything */}
+      {/* Title */}
       <div className="text-center">
         <motion.h1
           className="text-2xl font-bold text-cookie-dark leading-tight"
@@ -51,16 +43,14 @@ export function CookieHero() {
         </motion.p>
       </div>
 
-      {/* Cookie with candles on top */}
+      {/* Cookie with candles */}
       <div className="relative mt-2">
-        {/* Candles row — positioned above the cookie */}
         <div className="flex items-end justify-center gap-0.5 mb-[-4px] relative z-10">
           {candles.map((i) => (
             <Candle key={i} index={i} lit={i < candlesLit} />
           ))}
         </div>
 
-        {/* Cookie body */}
         <motion.div
           className="w-56 h-56 rounded-full shadow-2xl"
           style={{
@@ -70,7 +60,6 @@ export function CookieHero() {
               "inset 0 -4px 8px rgba(0,0,0,0.2), 0 8px 32px rgba(139,94,60,0.4)",
           }}
         >
-          {/* Chocolate chips */}
           <div className="relative w-full h-full">
             {[
               { top: "25%", left: "30%", size: 12 },
@@ -90,8 +79,7 @@ export function CookieHero() {
                   left: chip.left,
                   width: chip.size,
                   height: chip.size * 0.8,
-                  background:
-                    "radial-gradient(circle at 30% 30%, #5C3317, #2C1810)",
+                  background: "radial-gradient(circle at 30% 30%, #5C3317, #2C1810)",
                   transform: `rotate(${i * 45}deg)`,
                 }}
               />
@@ -100,54 +88,29 @@ export function CookieHero() {
         </motion.div>
       </div>
 
-      {/* Actions */}
-      {phase === "landing" && (
-        <div className="flex flex-col items-center gap-3 w-full mt-2">
-          <motion.button
-            className="w-full max-w-xs h-12 rounded-full bg-cookie-brown text-white font-semibold text-base shadow-lg active:bg-cookie-dark transition-colors"
-            onClick={() => setPhase("blowing")}
-            whileTap={{ scale: 0.95 }}
+      {/* Blow button */}
+      <div className="flex flex-col items-center gap-3 w-full mt-2">
+        <p className="text-sm text-cookie-dark/60">
+          {candlesLit} vela{candlesLit !== 1 ? "s" : ""} restante{candlesLit !== 1 ? "s" : ""}
+        </p>
+
+        <motion.button
+          className="w-full max-w-xs h-12 rounded-full bg-cookie-brown text-white font-semibold text-base shadow-lg active:bg-cookie-dark transition-colors"
+          onClick={handleBlow}
+          whileTap={{ scale: 0.95 }}
+        >
+          Tocá para soplar 💨
+        </motion.button>
+
+        {candlesLit > 0 && candlesLit < 15 && (
+          <button
+            className="text-xs text-cookie-dark/40 underline active:text-cookie-dark/60 min-h-[44px] flex items-center"
+            onClick={blowAllCandles}
           >
-            ¡Pedí un deseo y soplá! 🌬️
-          </motion.button>
-
-          {hasVisitedGallery && (
-            <button
-              className="text-sm text-cookie-dark/50 active:text-cookie-dark/70 min-h-[44px]"
-              onClick={goToGallery}
-            >
-              Ir a la galería →
-            </button>
-          )}
-        </div>
-      )}
-
-      {phase === "blowing" && (
-        <div className="flex flex-col items-center gap-3 w-full mt-2">
-          <BlowDetector onBlow={handleBlow} />
-
-          <p className="text-sm text-cookie-dark/60 text-center">
-            {candlesLit} vela{candlesLit !== 1 ? "s" : ""} restante{candlesLit !== 1 ? "s" : ""}
-          </p>
-
-          <motion.button
-            className="w-full max-w-xs h-12 rounded-full bg-gold/20 text-cookie-dark font-medium text-sm border border-gold/40 active:bg-gold/30 transition-colors"
-            onClick={handleBlow}
-            whileTap={{ scale: 0.95 }}
-          >
-            Tocá para soplar 💨
-          </motion.button>
-
-          {candlesLit > 0 && candlesLit < 15 && (
-            <button
-              className="text-xs text-cookie-dark/40 underline active:text-cookie-dark/60 min-h-[44px] flex items-center"
-              onClick={blowAllCandles}
-            >
-              apagar todas
-            </button>
-          )}
-        </div>
-      )}
+            apagar todas
+          </button>
+        )}
+      </div>
     </motion.div>
   );
 }
