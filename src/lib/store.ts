@@ -6,7 +6,6 @@ import { persist } from "zustand/middleware";
 export type Phase =
   | "landing"
   | "blowing"
-  | "video"
   | "gallery"
   | "game"
   | "complete";
@@ -31,8 +30,6 @@ interface BirthdayState {
   goToGallery: () => void;
 }
 
-// WHY: Each game unlocks a group of photos (indices 0-12, 13 total).
-// First game gets 4, rest get 3 each. Completing all 4 = all 13 unlocked.
 const GAME_PHOTO_MAP: Record<GameId, number[]> = {
   memory: [0, 1, 2, 3],
   "guess-year": [4, 5, 6],
@@ -55,14 +52,14 @@ export const useBirthdayStore = create<BirthdayState>()(
       blowCandle: () => {
         const current = get().candlesLit;
         if (current <= 1) {
-          set({ candlesLit: 0, phase: "video" });
+          set({ candlesLit: 0, phase: "gallery", hasVisitedGallery: true });
         } else {
           set({ candlesLit: current - 1 });
         }
       },
 
       blowAllCandles: () => {
-        set({ candlesLit: 0, phase: "video" });
+        set({ candlesLit: 0, phase: "gallery", hasVisitedGallery: true });
       },
 
       startGame: (game) => set({ activeGame: game, phase: "game" }),
@@ -86,7 +83,6 @@ export const useBirthdayStore = create<BirthdayState>()(
 
       exitGame: () => set({ activeGame: null, phase: "gallery" }),
 
-      // WHY: Relight keeps all game progress — she just gets to blow again for fun
       relightCandles: () =>
         set({ candlesLit: 18, phase: "landing" }),
 

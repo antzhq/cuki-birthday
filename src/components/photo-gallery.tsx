@@ -20,8 +20,8 @@ export function PhotoGallery() {
     >
       <NavBar
         title="Galería de Cuki"
-        onBack={() => setPhase("video")}
-        backLabel="← Video"
+        onBack={relightCandles}
+        backLabel="← Velas"
         right={
           <button
             className="text-sm text-cookie-dark/50 active:text-cookie-dark min-h-[44px] flex items-center"

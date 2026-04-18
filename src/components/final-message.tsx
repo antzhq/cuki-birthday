@@ -72,9 +72,9 @@ export function FinalMessage() {
 
         <button
           className="text-sm text-cookie-dark/40 active:text-cookie-dark/60 min-h-[44px] flex items-center"
-          onClick={() => setPhase("video")}
+          onClick={() => setPhase("gallery")}
         >
-          Ver el video de nuevo
+          Volver a la galería
         </button>
       </div>
     </motion.div>
