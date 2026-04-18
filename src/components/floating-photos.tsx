@@ -16,7 +16,7 @@ interface PhotoState {
   phase: "dropping" | "floating";
 }
 
-const PHOTO_SIZE = 180;
+const PHOTO_SIZE = 100;
 const GRAVITY = 0.5;
 const FLOAT_SPEED = 1.5;
 
@@ -42,7 +42,7 @@ export function FloatingPhotos() {
     const initial: PhotoState[] = PHOTO_FILES.map((_, i) => ({
       id: i,
       x: Math.random() * (w - PHOTO_SIZE),
-      y: -PHOTO_SIZE - i * 120 - Math.random() * 100,
+      y: -PHOTO_SIZE - i * 60 - Math.random() * 50,
       vx: (Math.random() - 0.5) * 2,
       vy: 0,
       rotation: (Math.random() - 0.5) * 20,
