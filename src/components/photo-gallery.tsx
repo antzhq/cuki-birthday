@@ -18,14 +18,13 @@ export function PhotoGallery() {
     >
       <div className="text-center">
         <h2 className="text-2xl font-bold text-cookie-dark">
-          Cuki&apos;s Gallery
+          Galería de Cuki
         </h2>
         <p className="text-sm text-cookie-dark/60 mt-1">
-          {unlockedPhotos.length} / {TOTAL_PHOTOS} photos unlocked
+          {unlockedPhotos.length} / {TOTAL_PHOTOS} fotos desbloqueadas
         </p>
       </div>
 
-      {/* Photo grid */}
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 w-full">
         {PHOTO_FILES.map((src, i) => (
           <PhotoCard
@@ -38,11 +37,10 @@ export function PhotoGallery() {
         ))}
       </div>
 
-      {/* Game menu if games remain */}
       {completedGames.length < 4 && (
         <div className="w-full mt-4">
           <h3 className="text-lg font-semibold text-cookie-dark text-center mb-3">
-            Play to Unlock More! 🎮
+            ¡Jugá para desbloquear más! 🎮
           </h3>
           <GameMenu />
         </div>

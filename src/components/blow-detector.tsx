@@ -16,7 +16,7 @@ export function BlowDetector({ onBlow }: BlowDetectorProps) {
   if (permissionDenied) {
     return (
       <p className="text-sm text-cookie-dark/60 text-center">
-        Mic not available — use the tap button below!
+        Micrófono no disponible — ¡usá el botón de abajo!
       </p>
     );
   }
@@ -29,7 +29,7 @@ export function BlowDetector({ onBlow }: BlowDetectorProps) {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        🎤 Enable Mic to Blow
+        🎤 Activar micrófono para soplar
       </motion.button>
     );
   }
@@ -41,7 +41,7 @@ export function BlowDetector({ onBlow }: BlowDetectorProps) {
       transition={{ duration: 2, repeat: Infinity }}
     >
       <span className="w-2 h-2 rounded-full bg-green-500" />
-      Listening... blow into your mic!
+      Escuchando... ¡soplá al micrófono!
     </motion.div>
   );
 }

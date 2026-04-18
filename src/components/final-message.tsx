@@ -20,7 +20,7 @@ export function FinalMessage() {
         initial={{ y: 20 }}
         animate={{ y: 0 }}
       >
-        🍪 Happy 18th, Cuki! 🍪
+        🍪 ¡Felices 18, Cuki! 🍪
       </motion.h2>
 
       <motion.p
@@ -29,14 +29,13 @@ export function FinalMessage() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
       >
-        You unlocked all the memories! Every single one of these photos
-        is a reminder of how special you are. Welcome to adulthood —
-        the world is lucky to have you.
+        ¡Desbloqueaste todos los recuerdos! Cada una de estas fotos
+        es un recordatorio de lo especial que sos. Bienvenida a la
+        adultez — el mundo tiene suerte de tenerte.
         <br /><br />
         Te quiero mucho, hermanita. 💖
       </motion.p>
 
-      {/* Full unlocked gallery */}
       <div className="grid grid-cols-3 gap-2 w-full">
         {PHOTO_FILES.map((src, i) => (
           <motion.div
@@ -62,13 +61,12 @@ export function FinalMessage() {
         ))}
       </div>
 
-      {/* Easter egg */}
       <motion.button
         className="text-sm text-cookie-dark/30 hover:text-cookie-dark/60 transition-colors"
         onClick={relightCandles}
         whileHover={{ scale: 1.05 }}
       >
-        🕯️ relight the candles?
+        🕯️ ¿volver a encender las velas?
       </motion.button>
     </motion.div>
   );

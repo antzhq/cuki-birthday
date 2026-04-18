@@ -22,7 +22,6 @@ function isSolvable(board: number[]): boolean {
       }
     }
   }
-  // WHY: For odd-sized grids, solvable if inversions is even
   return inversions % 2 === 0;
 }
 
@@ -56,7 +55,6 @@ function getAdjacentToEmpty(board: number[]): number[] {
   return adjacent;
 }
 
-// WHY: Cookie emoji pieces as the puzzle image — no external image dependency
 const TILE_EMOJIS = ["🍪", "🎂", "🎁", "🎈", "⭐", "💖", "🌸", "🦋"];
 
 export function SlidingPuzzle() {
@@ -109,16 +107,16 @@ export function SlidingPuzzle() {
           className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
           onClick={exitGame}
         >
-          ← Back
+          ← Volver
         </button>
         <h2 className="text-xl font-bold text-cookie-dark">
-          🧩 Sliding Puzzle
+          🧩 Rompecabezas
         </h2>
-        <span className="text-sm text-cookie-dark/50">{moves} moves</span>
+        <span className="text-sm text-cookie-dark/50">{moves} movimientos</span>
       </div>
 
       <p className="text-sm text-cookie-dark/60">
-        Tap a tile next to the empty space to slide it!
+        ¡Tocá una pieza junto al espacio vacío para moverla!
       </p>
 
       <div
@@ -156,7 +154,7 @@ export function SlidingPuzzle() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
         >
-          🎉 Solved in {moves} moves!
+          🎉 ¡Resuelto en {moves} movimientos!
         </motion.p>
       )}
     </motion.div>

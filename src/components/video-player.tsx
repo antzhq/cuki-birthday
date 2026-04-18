@@ -14,7 +14,7 @@ export function VideoPlayer() {
       transition={{ duration: 0.6 }}
     >
       <h2 className="text-2xl font-bold text-cookie-dark text-center">
-        🎉 You blew them all out!
+        🎉 ¡Las apagaste todas!
       </h2>
 
       <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-xl bg-cookie-dark/10">
@@ -27,7 +27,7 @@ export function VideoPlayer() {
           onEnded={() => setPhase("gallery")}
         >
           <source src="/video/birthday.mp4" type="video/mp4" />
-          Your browser does not support video.
+          Tu navegador no soporta video.
         </video>
       </div>
 
@@ -37,7 +37,7 @@ export function VideoPlayer() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        Skip to Gallery →
+        Ir a la Galería →
       </motion.button>
     </motion.div>
   );

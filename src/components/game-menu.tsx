@@ -6,27 +6,27 @@ import { useBirthdayStore, type GameId } from "@/lib/store";
 const GAMES: { id: GameId; name: string; icon: string; desc: string }[] = [
   {
     id: "memory",
-    name: "Memory Match",
+    name: "Memoria",
     icon: "🧠",
-    desc: "Find the matching pairs",
+    desc: "Encontrá las parejas",
   },
   {
     id: "guess-year",
-    name: "Guess the Year",
+    name: "Adiviná el Año",
     icon: "📅",
-    desc: "When was this photo taken?",
+    desc: "¿Cuándo se tomó esta foto?",
   },
   {
     id: "trivia",
-    name: "Cuki Trivia",
+    name: "Trivia de Cuki",
     icon: "❓",
-    desc: "How well do you know her?",
+    desc: "¿Qué tanto la conocés?",
   },
   {
     id: "puzzle",
-    name: "Sliding Puzzle",
+    name: "Rompecabezas",
     icon: "🧩",
-    desc: "Solve the picture puzzle",
+    desc: "Resolvé el puzzle",
   },
 ];
 

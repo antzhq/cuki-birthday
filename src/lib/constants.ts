@@ -39,28 +39,28 @@ export interface TriviaQuestion {
 
 export const TRIVIA_QUESTIONS: TriviaQuestion[] = [
   {
-    question: "What is Cuki's real name?",
-    options: ["Option A", "Option B", "Option C", "Option D"],
+    question: "¿Cuál es el nombre real de Cuki?",
+    options: ["Opción A", "Opción B", "Opción C", "Opción D"],
     correctIndex: 0,
   },
   {
-    question: "What year was Cuki born?",
+    question: "¿En qué año nació Cuki?",
     options: ["2006", "2007", "2008", "2009"],
     correctIndex: 2,
   },
   {
-    question: "What's Cuki's favorite food?",
-    options: ["Option A", "Option B", "Option C", "Option D"],
+    question: "¿Cuál es la comida favorita de Cuki?",
+    options: ["Opción A", "Opción B", "Opción C", "Opción D"],
     correctIndex: 0,
   },
   {
-    question: "What does Cuki want to study?",
-    options: ["Option A", "Option B", "Option C", "Option D"],
+    question: "¿Qué quiere estudiar Cuki?",
+    options: ["Opción A", "Opción B", "Opción C", "Opción D"],
     correctIndex: 0,
   },
   {
-    question: "What's Cuki's hidden talent?",
-    options: ["Option A", "Option B", "Option C", "Option D"],
+    question: "¿Cuál es el talento oculto de Cuki?",
+    options: ["Opción A", "Opción B", "Opción C", "Opción D"],
     correctIndex: 0,
   },
 ];

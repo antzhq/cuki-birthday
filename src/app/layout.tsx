@@ -8,8 +8,8 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Happy 18th Birthday Cuki! 🍪",
-  description: "A special birthday surprise for the sweetest cookie",
+  title: "¡Feliz cumpleaños #18, Cuki! 🍪",
+  description: "Una sorpresa especial de cumpleaños para la galleta más dulce",
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
+    <html lang="es" className={`${geistSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

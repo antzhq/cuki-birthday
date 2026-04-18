@@ -101,13 +101,13 @@ export function MemoryMatch() {
           className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
           onClick={exitGame}
         >
-          ← Back
+          ← Volver
         </button>
-        <h2 className="text-xl font-bold text-cookie-dark">🧠 Memory Match</h2>
-        <span className="text-sm text-cookie-dark/50">{moves} moves</span>
+        <h2 className="text-xl font-bold text-cookie-dark">🧠 Memoria</h2>
+        <span className="text-sm text-cookie-dark/50">{moves} intentos</span>
       </div>
 
-      <p className="text-sm text-cookie-dark/60">Find all matching pairs!</p>
+      <p className="text-sm text-cookie-dark/60">¡Encontrá todas las parejas!</p>
 
       <div className="grid grid-cols-4 gap-2 w-full max-w-xs">
         {cards.map((card) => {

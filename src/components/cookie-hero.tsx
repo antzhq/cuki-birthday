@@ -11,7 +11,6 @@ export function CookieHero() {
     useBirthdayStore();
 
   const handleBlow = () => {
-    // WHY: Each blow extinguishes 2-3 candles for a satisfying pace
     const toExtinguish = Math.min(candlesLit, 2 + Math.floor(Math.random() * 2));
     for (let i = 0; i < toExtinguish; i++) {
       setTimeout(() => blowCandle(), i * 150);
@@ -27,20 +26,17 @@ export function CookieHero() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      {/* Title */}
       <motion.h1
         className="text-3xl sm:text-4xl font-bold text-cookie-dark text-center"
         animate={{ scale: [1, 1.02, 1] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       >
-        Happy 18th Birthday
+        ¡Feliz cumpleaños #18
         <br />
         <span className="text-4xl sm:text-5xl text-pink">Cuki!</span>
       </motion.h1>
 
-      {/* Cookie */}
       <div className="relative">
-        {/* Cookie body */}
         <motion.div
           className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full shadow-2xl flex items-center justify-center"
           style={{
@@ -51,7 +47,6 @@ export function CookieHero() {
           }}
           whileHover={{ scale: 1.02 }}
         >
-          {/* Chocolate chips */}
           {[
             { top: "25%", left: "30%", size: 12 },
             { top: "40%", left: "55%", size: 14 },
@@ -77,20 +72,14 @@ export function CookieHero() {
             />
           ))}
 
-          {/* Candles arranged in an arc on top of the cookie */}
           <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex items-end gap-1">
             {candles.map((i) => (
-              <Candle
-                key={i}
-                index={i}
-                lit={i < candlesLit}
-              />
+              <Candle key={i} index={i} lit={i < candlesLit} />
             ))}
           </div>
         </motion.div>
       </div>
 
-      {/* Blow interaction */}
       {phase === "landing" && (
         <motion.button
           className="mt-4 px-8 py-3 rounded-full bg-cookie-brown text-white font-semibold text-lg shadow-lg hover:bg-cookie-dark transition-colors"
@@ -98,7 +87,7 @@ export function CookieHero() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          Make a Wish & Blow! 🌬️
+          ¡Pedí un deseo y soplá! 🌬️
         </motion.button>
       )}
 
@@ -107,25 +96,23 @@ export function CookieHero() {
           <BlowDetector onBlow={handleBlow} />
 
           <p className="text-sm text-cookie-dark/60 text-center">
-            {candlesLit} candle{candlesLit !== 1 ? "s" : ""} left
+            {candlesLit} vela{candlesLit !== 1 ? "s" : ""} restante{candlesLit !== 1 ? "s" : ""}
           </p>
 
-          {/* Click fallback */}
           <motion.button
             className="px-6 py-2 rounded-full bg-gold/20 text-cookie-dark font-medium text-sm border border-gold/40 hover:bg-gold/30 transition-colors"
             onClick={handleBlow}
             whileTap={{ scale: 0.9 }}
           >
-            Tap to Blow 💨
+            Tocá para soplar 💨
           </motion.button>
 
-          {/* Skip button if impatient */}
           {candlesLit > 0 && candlesLit < 15 && (
             <button
               className="text-xs text-cookie-dark/40 underline hover:text-cookie-dark/60"
               onClick={blowAllCandles}
             >
-              blow them all out
+              apagar todas
             </button>
           )}
         </div>

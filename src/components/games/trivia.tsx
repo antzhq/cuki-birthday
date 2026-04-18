@@ -51,7 +51,7 @@ export function Trivia() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <h2 className="text-2xl font-bold text-cookie-dark">Results!</h2>
+        <h2 className="text-2xl font-bold text-cookie-dark">¡Resultados!</h2>
         <p className="text-5xl">
           {score === TRIVIA_QUESTIONS.length
             ? "🏆"
@@ -60,12 +60,12 @@ export function Trivia() {
             : "💪"}
         </p>
         <p className="text-lg text-cookie-dark">
-          {score} / {TRIVIA_QUESTIONS.length} correct
+          {score} / {TRIVIA_QUESTIONS.length} correctas
         </p>
         <p className="text-sm text-cookie-dark/60">
           {score === TRIVIA_QUESTIONS.length
-            ? "You really know Cuki!"
-            : "You still unlocked photos though!"}
+            ? "¡Realmente conocés a Cuki!"
+            : "¡Igual desbloqueaste las fotos!"}
         </p>
         <motion.button
           className="px-6 py-2 rounded-full bg-cookie-brown text-white font-medium shadow-md"
@@ -73,7 +73,7 @@ export function Trivia() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          Claim Photos! 🔓
+          ¡Reclamar fotos! 🔓
         </motion.button>
       </motion.div>
     );
@@ -90,15 +90,14 @@ export function Trivia() {
           className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
           onClick={exitGame}
         >
-          ← Back
+          ← Volver
         </button>
-        <h2 className="text-xl font-bold text-cookie-dark">❓ Cuki Trivia</h2>
+        <h2 className="text-xl font-bold text-cookie-dark">❓ Trivia de Cuki</h2>
         <span className="text-sm text-cookie-dark/50">
           {currentQ + 1}/{TRIVIA_QUESTIONS.length}
         </span>
       </div>
 
-      {/* Progress bar */}
       <div className="w-full h-2 bg-cookie-light/30 rounded-full overflow-hidden">
         <motion.div
           className="h-full bg-gold rounded-full"

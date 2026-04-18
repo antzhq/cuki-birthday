@@ -15,7 +15,6 @@ export function GuessTheYear() {
 
   const distance = Math.abs(guess - GUESS_YEAR_ANSWER);
   const maxDistance = CURRENT_YEAR - BIRTH_YEAR;
-  // WHY: Blur decreases as guess approaches correct year — visual feedback
   const blurAmount = Math.round((distance / maxDistance) * 20);
   const isCorrect = distance === 0;
 
@@ -43,24 +42,23 @@ export function GuessTheYear() {
           className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
           onClick={exitGame}
         >
-          ← Back
+          ← Volver
         </button>
         <h2 className="text-xl font-bold text-cookie-dark">
-          📅 Guess the Year
+          📅 Adiviná el Año
         </h2>
         <div />
       </div>
 
       <p className="text-sm text-cookie-dark/60 text-center">
-        When was this photo taken? Slide to guess — the photo gets clearer as
-        you get closer!
+        ¿Cuándo se tomó esta foto? Deslizá para adivinar — ¡la foto se aclara
+        cuando te acercás!
       </p>
 
-      {/* Photo with dynamic blur */}
       <div className="relative w-full max-w-xs aspect-square rounded-xl overflow-hidden shadow-lg">
         <Image
           src="/photos/CumpleCuki5.jpg"
-          alt="Guess when this was taken"
+          alt="Adiviná cuándo se tomó"
           fill
           className="object-cover transition-all duration-300"
           style={{ filter: `blur(${blurAmount}px)` }}
@@ -77,7 +75,6 @@ export function GuessTheYear() {
         )}
       </div>
 
-      {/* Year slider */}
       <div className="w-full max-w-xs flex flex-col gap-2">
         <input
           type="range"
@@ -95,16 +92,15 @@ export function GuessTheYear() {
         </div>
       </div>
 
-      {/* Hint text */}
       {!submitted && (
         <p className="text-sm text-cookie-dark/60">
           {distance === 0
-            ? "🎯 Perfect! That's it!"
+            ? "🎯 ¡Perfecto! ¡Ese es!"
             : distance <= 2
-            ? "🔥 So close!"
+            ? "🔥 ¡Muy cerca!"
             : distance <= 5
-            ? "🤔 Getting warmer..."
-            : "❄️ Not quite..."}
+            ? "🤔 Te estás acercando..."
+            : "❄️ Todavía no..."}
         </p>
       )}
 
@@ -119,7 +115,7 @@ export function GuessTheYear() {
         whileHover={isCorrect ? { scale: 1.05 } : {}}
         whileTap={isCorrect ? { scale: 0.95 } : {}}
       >
-        {isCorrect ? "Confirm! ✓" : "Slide to the right year"}
+        {isCorrect ? "¡Confirmar! ✓" : "Deslizá al año correcto"}
       </motion.button>
     </motion.div>
   );

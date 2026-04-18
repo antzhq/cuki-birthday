@@ -40,7 +40,7 @@ export function UnlockAnimation({ count, onDone }: UnlockAnimationProps) {
         animate={{ scale: [0, 1.3, 1] }}
         transition={{ duration: 0.5 }}
       >
-        🔓 {count} photos unlocked!
+        🔓 ¡{count} fotos desbloqueadas!
       </motion.div>
 
       {particles.map((p) => (
