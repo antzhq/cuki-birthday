@@ -11,9 +11,9 @@ interface UseBlowDetectionOptions {
 export function useBlowDetection({
   onBlow,
   enabled,
-  // WHY: Phone mic blowing registers as low-amplitude broadband noise.
-  // 15 is very sensitive — even a gentle blow should trigger it.
-  threshold = 15,
+  // WHY: Even blowing at arm's length from the phone should register.
+  // 5 is extremely sensitive — picks up the faintest air movement.
+  threshold = 5,
 }: UseBlowDetectionOptions) {
   const [micState, setMicState] = useState<"idle" | "active" | "denied">("idle");
   const analyserRef = useRef<AnalyserNode | null>(null);
