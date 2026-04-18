@@ -1,7 +1,36 @@
 export const TOTAL_CANDLES = 18;
-export const TOTAL_PHOTOS = 13;
 
-export const PHOTO_FILES = Array.from(
-  { length: 13 },
-  (_, i) => `/photos/CumpleCuki${i + 1}.jpg`
-);
+export const PHOTO_FILES = [
+  "/photos/CumpleCuki1.jpg",
+  "/photos/CumpleCuki2.jpg",
+  "/photos/CumpleCuki3.jpg",
+  "/photos/CumpleCuki4.jpg",
+  "/photos/CumpleCuki5.jpg",
+  "/photos/CumpleCuki6.jpg",
+  "/photos/CumpleCuki7.jpg",
+  "/photos/CumpleCuki8.jpg",
+  "/photos/CumpleCuki9.jpg",
+  "/photos/CumpleCuki10.jpg",
+  "/photos/CumpleCuki11.jpg",
+  "/photos/CumpleCuki12.jpg",
+  "/photos/CumpleCuki13.jpg",
+  "/photos/CumpleCuki14.jpg",
+  "/photos/CumpleCuki15.jpg",
+  "/photos/CumpleCuki16.jpg",
+  "/photos/CumpleCuki17.jpg",
+  "/photos/CumpleCuki18.jpg",
+  "/photos/CumpleCuki19.jpg",
+  "/photos/CumpleCuki22.jpg",
+  "/photos/CumpleCuki23.jpg",
+  "/photos/CumpleCuki24.jpg",
+  "/photos/CumpleCuki25.jpg",
+  "/photos/CumpleCuki26.jpg",
+  "/photos/CumpleCuki27.jpg",
+  "/photos/CumpleCuki28.jpg",
+  "/photos/CumpleCuki29.jpg",
+  "/photos/CumpleCuki30.jpg",
+  "/photos/CumpleCuki120.jpg",
+  "/photos/CumpleCuki121.jpg",
+];
+
+export const TOTAL_PHOTOS = PHOTO_FILES.length;
