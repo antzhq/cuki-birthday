@@ -1,0 +1,52 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { useBirthdayStore } from "@/lib/store";
+import { PHOTO_FILES, PHOTO_CAPTIONS, TOTAL_PHOTOS } from "@/lib/constants";
+import { PhotoCard } from "./photo-card";
+import { GameMenu } from "./game-menu";
+
+export function PhotoGallery() {
+  const { unlockedPhotos, completedGames } = useBirthdayStore();
+
+  return (
+    <motion.div
+      className="flex flex-col items-center gap-6 w-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-cookie-dark">
+          Cuki&apos;s Gallery
+        </h2>
+        <p className="text-sm text-cookie-dark/60 mt-1">
+          {unlockedPhotos.length} / {TOTAL_PHOTOS} photos unlocked
+        </p>
+      </div>
+
+      {/* Photo grid */}
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 w-full">
+        {PHOTO_FILES.map((src, i) => (
+          <PhotoCard
+            key={i}
+            src={src}
+            caption={PHOTO_CAPTIONS[i]}
+            unlocked={unlockedPhotos.includes(i)}
+            index={i}
+          />
+        ))}
+      </div>
+
+      {/* Game menu if games remain */}
+      {completedGames.length < 4 && (
+        <div className="w-full mt-4">
+          <h3 className="text-lg font-semibold text-cookie-dark text-center mb-3">
+            Play to Unlock More! 🎮
+          </h3>
+          <GameMenu />
+        </div>
+      )}
+    </motion.div>
+  );
+}
