@@ -13,7 +13,7 @@ interface PhotoState {
   vx: number;
   vy: number;
   rotation: number;
-  phase: "dropping" | "floating";
+  phase: "dropping" | "floating" | "dragging";
 }
 
 const PHOTO_SIZE = 100;
@@ -29,7 +29,17 @@ export function FloatingPhotos() {
   const dimsRef = useRef({ w: 0, h: 0 });
   const pausedRef = useRef(false);
 
-  // Pause/resume animation when lightbox opens/closes
+  // Drag tracking
+  const dragRef = useRef<{
+    id: number;
+    startX: number;
+    startY: number;
+    lastX: number;
+    lastY: number;
+    prevX: number;
+    prevY: number;
+  } | null>(null);
+
   useEffect(() => {
     pausedRef.current = openPhoto !== null;
   }, [openPhoto]);
@@ -57,6 +67,9 @@ export function FloatingPhotos() {
         const { w, h } = dimsRef.current;
 
         photosRef.current = photosRef.current.map((p) => {
+          // Skip physics for dragged photo
+          if (p.phase === "dragging") return p;
+
           let { x, y, vx, vy, rotation, phase } = p;
 
           if (phase === "dropping") {
@@ -74,6 +87,7 @@ export function FloatingPhotos() {
             x += vx;
             y += vy;
 
+            // Elastic bounces — no dampening, full speed preserved
             if (y + PHOTO_SIZE > h) { y = h - PHOTO_SIZE; vy = -Math.abs(vy); }
             if (y < 0) { y = 0; vy = Math.abs(vy); }
             if (x + PHOTO_SIZE > w) { x = w - PHOTO_SIZE; vx = -Math.abs(vx); }
@@ -100,6 +114,101 @@ export function FloatingPhotos() {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener("resize", handleResize);
     };
+  }, []);
+
+  // Drag handlers
+  const handleDragStart = useCallback((id: number, clientX: number, clientY: number) => {
+    const photo = photosRef.current.find((p) => p.id === id);
+    if (!photo) return;
+
+    dragRef.current = {
+      id,
+      startX: clientX - photo.x,
+      startY: clientY - photo.y,
+      lastX: clientX,
+      lastY: clientY,
+      prevX: clientX,
+      prevY: clientY,
+    };
+
+    // Set to dragging + bring to front by moving to end of array
+    photosRef.current = [
+      ...photosRef.current.filter((p) => p.id !== id),
+      { ...photo, phase: "dragging", vx: 0, vy: 0 },
+    ];
+  }, []);
+
+  const handleDragMove = useCallback((clientX: number, clientY: number) => {
+    const drag = dragRef.current;
+    if (!drag) return;
+
+    const { w, h } = dimsRef.current;
+    const newX = Math.max(0, Math.min(clientX - drag.startX, w - PHOTO_SIZE));
+    const newY = Math.max(0, Math.min(clientY - drag.startY, h - PHOTO_SIZE));
+
+    drag.prevX = drag.lastX;
+    drag.prevY = drag.lastY;
+    drag.lastX = clientX;
+    drag.lastY = clientY;
+
+    photosRef.current = photosRef.current.map((p) =>
+      p.id === drag.id ? { ...p, x: newX, y: newY } : p
+    );
+    setPhotos([...photosRef.current]);
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    const drag = dragRef.current;
+    if (!drag) return;
+
+    // WHY: Velocity from last two pointer positions gives a natural "throw" feel
+    const vx = (drag.lastX - drag.prevX) * 0.5;
+    const vy = (drag.lastY - drag.prevY) * 0.5;
+
+    photosRef.current = photosRef.current.map((p) =>
+      p.id === drag.id
+        ? { ...p, phase: "floating" as const, vx: vx || (Math.random() - 0.5) * 2, vy: vy || -1 }
+        : p
+    );
+
+    dragRef.current = null;
+  }, []);
+
+  // Global move/end listeners
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => handleDragMove(e.clientX, e.clientY);
+    const onMouseUp = () => handleDragEnd();
+    const onTouchMove = (e: TouchEvent) => {
+      if (dragRef.current) e.preventDefault();
+      const t = e.touches[0];
+      handleDragMove(t.clientX, t.clientY);
+    };
+    const onTouchEnd = () => handleDragEnd();
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd);
+
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [handleDragMove, handleDragEnd]);
+
+  // Distinguish drag vs tap: only open lightbox if no drag happened
+  const handlePointerDown = useCallback((id: number, clientX: number, clientY: number) => {
+    handleDragStart(id, clientX, clientY);
+  }, [handleDragStart]);
+
+  const handleClick = useCallback((id: number, e: React.MouseEvent | React.TouchEvent) => {
+    // If a drag happened (moved more than 5px), don't open lightbox
+    const drag = dragRef.current;
+    if (drag) return;
+    e.stopPropagation();
+    setOpenPhoto(id);
   }, []);
 
   const handleDownload = useCallback(async (photoIndex: number) => {
@@ -135,25 +244,35 @@ export function FloatingPhotos() {
 
       {/* Floating photos */}
       {photos.map((photo) => (
-        <button
+        <div
           key={photo.id}
-          className="absolute rounded-2xl overflow-hidden shadow-xl border-3 border-white cursor-pointer"
+          className="absolute rounded-2xl overflow-hidden shadow-xl border-3 border-white cursor-grab active:cursor-grabbing touch-none"
           style={{
             width: PHOTO_SIZE,
             height: PHOTO_SIZE,
             transform: `translate(${photo.x}px, ${photo.y}px) rotate(${photo.rotation}deg)`,
             willChange: "transform",
+            zIndex: photo.phase === "dragging" ? 40 : 25,
           }}
-          onClick={() => setOpenPhoto(photo.id)}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            handlePointerDown(photo.id, e.clientX, e.clientY);
+          }}
+          onTouchStart={(e) => {
+            const t = e.touches[0];
+            handlePointerDown(photo.id, t.clientX, t.clientY);
+          }}
+          onClick={(e) => handleClick(photo.id, e)}
         >
           <Image
             src={PHOTO_FILES[photo.id]}
             alt={`Foto ${photo.id + 1}`}
             fill
-            className="object-cover"
+            className="object-cover pointer-events-none"
             sizes={`${PHOTO_SIZE}px`}
+            draggable={false}
           />
-        </button>
+        </div>
       ))}
 
       {/* Lightbox */}
@@ -166,7 +285,6 @@ export function FloatingPhotos() {
             exit={{ opacity: 0 }}
             onClick={() => setOpenPhoto(null)}
           >
-            {/* Photo */}
             <motion.div
               className="relative w-[85vw] h-[85vw] max-w-md max-h-md rounded-2xl overflow-hidden shadow-2xl"
               initial={{ scale: 0.5, opacity: 0 }}
@@ -185,7 +303,6 @@ export function FloatingPhotos() {
               />
             </motion.div>
 
-            {/* Buttons */}
             <motion.div
               className="flex gap-3 mt-4"
               initial={{ opacity: 0, y: 20 }}
