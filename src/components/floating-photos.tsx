@@ -13,12 +13,12 @@ interface PhotoState {
   vx: number;
   vy: number;
   rotation: number;
-  phase: "dropping" | "floating" | "dragging";
+  phase: "exploding" | "floating" | "dragging";
 }
 
 const PHOTO_SIZE = 100;
-const GRAVITY = 0.5;
 const FLOAT_SPEED = 1.5;
+const EXPLODE_SPEED = 12;
 
 export function FloatingPhotos() {
   const reset = useBirthdayStore((s) => s.reset);
@@ -49,15 +49,26 @@ export function FloatingPhotos() {
     const h = window.innerHeight;
     dimsRef.current = { w, h };
 
-    const initial: PhotoState[] = PHOTO_FILES.map((_, i) => ({
-      id: i,
-      x: Math.random() * (w - PHOTO_SIZE),
-      y: -PHOTO_SIZE - i * 60 - Math.random() * 50,
-      vx: (Math.random() - 0.5) * 2,
-      vy: 0,
-      rotation: (Math.random() - 0.5) * 20,
-      phase: "dropping" as const,
-    }));
+    // WHY: All photos start at the center of the screen (where the cake was)
+    // and explode outward in random directions
+    const centerX = w / 2 - PHOTO_SIZE / 2;
+    const centerY = h / 2 - PHOTO_SIZE / 2;
+
+    const initial: PhotoState[] = PHOTO_FILES.map((_, i) => {
+      // Distribute angles evenly with some randomness
+      const angle = (i / PHOTO_FILES.length) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+      const speed = EXPLODE_SPEED * (0.7 + Math.random() * 0.6);
+
+      return {
+        id: i,
+        x: centerX,
+        y: centerY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        rotation: (Math.random() - 0.5) * 30,
+        phase: "exploding" as const,
+      };
+    });
 
     photosRef.current = initial;
     setPhotos(initial);
@@ -72,15 +83,25 @@ export function FloatingPhotos() {
 
           let { x, y, vx, vy, rotation, phase } = p;
 
-          if (phase === "dropping") {
-            vy += GRAVITY;
-            y += vy;
+          if (phase === "exploding") {
+            // Fly outward, decelerate
             x += vx;
+            y += vy;
+            vx *= 0.96;
+            vy *= 0.96;
 
-            if (y + PHOTO_SIZE >= h) {
-              y = h - PHOTO_SIZE;
-              vx = (Math.random() - 0.5) * FLOAT_SPEED * 2;
-              vy = -(Math.random() * FLOAT_SPEED + 0.5);
+            // Bounce off walls during explosion
+            if (y + PHOTO_SIZE > h) { y = h - PHOTO_SIZE; vy = -Math.abs(vy); }
+            if (y < 0) { y = 0; vy = Math.abs(vy); }
+            if (x + PHOTO_SIZE > w) { x = w - PHOTO_SIZE; vx = -Math.abs(vx); }
+            if (x < 0) { x = 0; vx = Math.abs(vx); }
+
+            // Once slow enough, switch to steady floating
+            const speed = Math.sqrt(vx * vx + vy * vy);
+            if (speed < FLOAT_SPEED) {
+              const floatAngle = Math.atan2(vy, vx);
+              vx = Math.cos(floatAngle) * FLOAT_SPEED;
+              vy = Math.sin(floatAngle) * FLOAT_SPEED;
               phase = "floating";
             }
           } else {
