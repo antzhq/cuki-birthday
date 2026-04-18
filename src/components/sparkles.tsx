@@ -8,18 +8,21 @@ interface Particle {
   delay: number;
   duration: number;
   size: number;
+  type: "gold" | "pink" | "white";
 }
 
 export function Sparkles() {
   const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
-    const generated: Particle[] = Array.from({ length: 20 }, (_, i) => ({
+    const types: Particle["type"][] = ["gold", "pink", "white"];
+    const generated: Particle[] = Array.from({ length: 30 }, (_, i) => ({
       id: i,
       left: Math.random() * 100,
-      delay: Math.random() * 8,
-      duration: 6 + Math.random() * 6,
+      delay: Math.random() * 10,
+      duration: 7 + Math.random() * 8,
       size: 2 + Math.random() * 4,
+      type: types[i % 3],
     }));
     setParticles(generated);
   }, []);
@@ -29,14 +32,14 @@ export function Sparkles() {
       {particles.map((p) => (
         <div
           key={p.id}
-          className="sparkle-particle"
+          className={`sparkle-particle sparkle-${p.type}`}
           style={{
             left: `${p.left}%`,
             animationDelay: `${p.delay}s`,
-            animationDuration: `${p.duration}s, 2s`,
+            "--dur": `${p.duration}s`,
             width: p.size,
             height: p.size,
-          }}
+          } as React.CSSProperties}
         />
       ))}
     </div>

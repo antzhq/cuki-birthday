@@ -12,124 +12,143 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
 
   return (
     <div className="relative flex flex-col items-center">
-      {/* Candles row — sitting ON the cake top */}
-      <div className="flex items-end justify-center gap-[6px] mb-[-2px] relative z-10 px-4">
+      {/* Candles */}
+      <div className="flex items-end justify-center gap-[5px] mb-[-2px] relative z-10 px-2">
         {candles.map((i) => {
           const lit = i < candlesLit;
-          // Alternate candle colors for a festive look
-          const colors = ["#FF69B4", "#FFD700", "#87CEEB", "#FF6B6B", "#98FB98", "#DDA0DD"];
+          const colors = [
+            "#E8587A", "#E8A838", "#6BC5D2", "#E86B6B",
+            "#7BC88F", "#C490D1",
+          ];
           const color = colors[i % colors.length];
 
           return (
             <div key={i} className="flex flex-col items-center">
-              {/* Flame */}
               <AnimatePresence>
                 {lit && (
                   <motion.div
                     className="relative mb-[-1px]"
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0, opacity: 0, y: -10, transition: { duration: 0.3 } }}
+                    exit={{
+                      scale: 0,
+                      opacity: 0,
+                      y: -12,
+                      transition: { duration: 0.4, ease: "easeOut" },
+                    }}
                   >
-                    {/* Glow */}
                     <motion.div
-                      className="absolute -inset-1.5 rounded-full blur-sm"
-                      style={{ background: "rgba(255, 200, 50, 0.4)" }}
-                      animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }}
-                      transition={{ duration: 0.6 + i * 0.03, repeat: Infinity }}
+                      className="absolute -inset-2 rounded-full blur-md"
+                      style={{ background: "rgba(255, 180, 50, 0.35)" }}
+                      animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0.5, 0.2] }}
+                      transition={{ duration: 0.5 + i * 0.03, repeat: Infinity }}
                     />
-                    {/* Flame shape */}
                     <motion.div
-                      className="w-[5px] h-[10px]"
+                      className="w-[5px] h-[11px]"
                       style={{
-                        background: "linear-gradient(to top, #FF8C00, #FFE066, #FFF)",
+                        background: "linear-gradient(to top, #E8871E, #FFD866, #FFFDE8)",
                         borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%",
                       }}
                       animate={{
-                        scaleY: [1, 1.15, 0.9, 1.05, 1],
-                        scaleX: [1, 0.9, 1.1, 0.95, 1],
+                        scaleY: [1, 1.2, 0.85, 1.1, 1],
+                        scaleX: [1, 0.85, 1.15, 0.9, 1],
                       }}
-                      transition={{ duration: 0.4 + i * 0.02, repeat: Infinity }}
+                      transition={{ duration: 0.35 + i * 0.02, repeat: Infinity }}
                     />
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              {/* Candle stick */}
               <div
-                className="w-[4px] h-[22px] rounded-t-sm"
-                style={{ background: color }}
+                className="w-[4px] h-[20px] rounded-t-sm"
+                style={{
+                  background: `linear-gradient(180deg, ${color}, ${color}dd)`,
+                  boxShadow: `0 0 3px ${color}40`,
+                }}
               />
             </div>
           );
         })}
       </div>
 
-      {/* Cake body */}
-      <div className="relative">
-        {/* Top tier — small */}
-        <div className="relative mx-auto w-48 h-10 rounded-t-2xl overflow-hidden"
+      {/* Cake */}
+      <div className="relative" style={{ filter: "drop-shadow(0 8px 24px rgba(80,40,10,0.18))" }}>
+        {/* Top tier */}
+        <div
+          className="relative mx-auto w-44 h-9 rounded-t-xl overflow-hidden"
           style={{
-            background: "linear-gradient(180deg, #FFF0E0 0%, #FFDAB9 100%)",
-            boxShadow: "inset 0 -2px 4px rgba(0,0,0,0.1)",
+            background: "linear-gradient(180deg, #FFF5E8 0%, #FFE0C0 60%, #F5C89A 100%)",
           }}
         >
-          {/* Frosting drips */}
-          <div className="absolute bottom-0 left-0 right-0 h-3"
-            style={{ background: "linear-gradient(180deg, transparent, #FF69B4)" }}
+          {/* Pink frosting drip */}
+          <div className="absolute bottom-0 left-0 right-0 h-[10px]"
+            style={{ background: "linear-gradient(180deg, transparent 0%, #E8587A 100%)" }}
           />
           {/* Sprinkles */}
-          {[15, 30, 55, 75, 90, 110, 130, 150].map((left, i) => (
+          {[12, 28, 48, 68, 85, 100, 118, 134, 152].map((left, i) => (
             <div
               key={i}
               className="absolute rounded-full"
               style={{
-                width: 3,
-                height: 3,
-                top: 4 + (i % 3) * 3,
+                width: 3, height: 3,
+                top: 3 + (i % 3) * 3,
                 left,
-                background: ["#FF69B4", "#FFD700", "#87CEEB", "#98FB98"][i % 4],
-                transform: `rotate(${i * 45}deg)`,
+                background: ["#E8587A", "#E8A838", "#6BC5D2", "#7BC88F", "#C490D1"][i % 5],
               }}
             />
           ))}
         </div>
 
         {/* Middle tier */}
-        <div className="relative mx-auto w-56 h-12"
+        <div
+          className="relative mx-auto w-52 h-11"
           style={{
-            background: "linear-gradient(180deg, #FFB6C1 0%, #FF91A4 100%)",
-            boxShadow: "inset 0 2px 4px rgba(255,255,255,0.3), inset 0 -2px 4px rgba(0,0,0,0.1)",
+            background: "linear-gradient(180deg, #F4A0B0 0%, #E8587A 100%)",
           }}
         >
-          {/* Cream stripe */}
-          <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 h-2"
-            style={{ background: "rgba(255,255,255,0.5)" }}
+          <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 h-[3px]"
+            style={{ background: "rgba(255,255,255,0.35)" }}
+          />
+          {/* Subtle dots pattern */}
+          <div className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+              backgroundSize: "8px 8px",
+            }}
           />
         </div>
 
-        {/* Bottom tier — widest */}
-        <div className="relative mx-auto w-64 h-14 rounded-b-lg"
+        {/* Bottom tier */}
+        <div
+          className="relative mx-auto w-60 h-[52px] rounded-b-lg"
           style={{
-            background: "linear-gradient(180deg, #FFDAB9 0%, #DEB887 100%)",
-            boxShadow: "inset 0 2px 4px rgba(255,255,255,0.3), 0 4px 16px rgba(0,0,0,0.15)",
+            background: "linear-gradient(180deg, #FFD4A8 0%, #D4A06A 100%)",
           }}
         >
-          {/* Frosting drips from middle */}
-          <div className="absolute top-0 left-0 right-0 h-3"
-            style={{ background: "linear-gradient(180deg, #FF91A4, transparent)" }}
+          <div className="absolute top-0 left-0 right-0 h-[6px]"
+            style={{ background: "linear-gradient(180deg, #E8587A80, transparent)" }}
           />
-          {/* "18" text */}
+          {/* 18 badge */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-2xl font-bold text-white/80 drop-shadow-md">18</span>
+            <span
+              className="text-xl font-black tracking-wider"
+              style={{
+                fontFamily: "var(--font-display)",
+                color: "rgba(255,255,255,0.85)",
+                textShadow: "0 1px 3px rgba(120,60,20,0.3)",
+              }}
+            >
+              18
+            </span>
           </div>
         </div>
 
-        {/* Plate */}
-        <div className="mx-auto w-72 h-3 rounded-b-xl"
+        {/* Plate / base */}
+        <div
+          className="mx-auto w-[264px] h-[6px] rounded-b-2xl"
           style={{
-            background: "linear-gradient(180deg, #E8E8E8, #D0D0D0)",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            background: "linear-gradient(180deg, #EAEAEA, #D8D8D8)",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
           }}
         />
       </div>

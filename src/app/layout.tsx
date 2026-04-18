@@ -1,9 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const playfair = Playfair_Display({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["400", "700", "900"],
+});
+
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -18,6 +24,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
+  themeColor: "#FFF0E6",
 };
 
 export default function RootLayout({
@@ -26,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${geistSans.variable} antialiased`}>
+    <html lang="es" className={`${playfair.variable} ${inter.variable} antialiased`}>
       <body className="min-h-dvh flex flex-col">{children}</body>
     </html>
   );

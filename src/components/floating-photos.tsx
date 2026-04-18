@@ -255,10 +255,13 @@ export function FloatingPhotos() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.8 }}
       >
-        <h1 className="text-2xl font-bold text-cookie-dark">
-          🍪 ¡Felices 18, Cuki! 🍪
+        <h1
+          className="text-3xl font-black text-pink drop-shadow-sm"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          ¡Felices 18, Cuki!
         </h1>
-        <p className="text-sm text-cookie-dark/60 mt-1">
+        <p className="text-sm text-cookie-dark/50 mt-1 font-medium">
           Te quiero mucho, hermanita 💖
         </p>
       </motion.div>
@@ -267,7 +270,7 @@ export function FloatingPhotos() {
       {photos.map((photo) => (
         <div
           key={photo.id}
-          className="absolute rounded-2xl overflow-hidden shadow-xl border-3 border-white cursor-grab active:cursor-grabbing touch-none"
+          className="absolute rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.15)] border-[3px] border-white cursor-grab active:cursor-grabbing touch-none"
           style={{
             width: PHOTO_SIZE,
             height: PHOTO_SIZE,
@@ -300,14 +303,14 @@ export function FloatingPhotos() {
       <AnimatePresence>
         {openPhoto !== null && (
           <motion.div
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/75 backdrop-blur-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setOpenPhoto(null)}
           >
             <motion.div
-              className="relative w-[85vw] h-[85vw] max-w-md max-h-md rounded-2xl overflow-hidden shadow-2xl"
+              className="relative w-[85vw] h-[85vw] max-w-md max-h-md rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
@@ -333,16 +336,16 @@ export function FloatingPhotos() {
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className="px-5 h-11 rounded-full bg-white text-cookie-dark font-medium text-sm shadow-lg active:bg-gray-100"
+                className="px-6 h-11 rounded-full bg-white text-cookie-dark font-semibold text-sm shadow-lg active:bg-gray-50 transition-all active:scale-95"
                 onClick={() => handleDownload(openPhoto)}
               >
-                📥 Guardar foto
+                📥 Guardar
               </button>
               <button
-                className="px-5 h-11 rounded-full bg-white/20 text-white font-medium text-sm shadow-lg active:bg-white/30 backdrop-blur-sm"
+                className="px-6 h-11 rounded-full bg-white/15 text-white font-semibold text-sm shadow-lg active:bg-white/25 backdrop-blur-md border border-white/20 transition-all active:scale-95"
                 onClick={() => setOpenPhoto(null)}
               >
-                ✕ Cerrar
+                Cerrar
               </button>
             </motion.div>
           </motion.div>
@@ -351,7 +354,11 @@ export function FloatingPhotos() {
 
       {/* Replay button */}
       <motion.button
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 px-6 h-11 rounded-full bg-cookie-brown/90 text-white text-sm font-medium shadow-lg active:bg-cookie-dark backdrop-blur-sm"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 px-6 h-11 rounded-full text-white text-sm font-semibold shadow-lg backdrop-blur-md border border-white/15 transition-all active:scale-95"
+        style={{
+          background: "linear-gradient(135deg, rgba(184,120,74,0.85), rgba(138,85,48,0.85))",
+          boxShadow: "0 4px 20px rgba(138,85,48,0.25)",
+        }}
         onClick={reset}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

@@ -1,18 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FFF8F0;
-  --foreground: #3D2B1F;
-  --cookie-brown: #C68B59;
-  --cookie-dark: #8B5E3C;
+  --background: #FFF0E6;
+  --foreground: #2D1810;
+  --cookie-brown: #B8784A;
+  --cookie-dark: #7A4E2D;
   --cookie-light: #E8C99B;
   --cream: #FFF5E6;
-  --gold: #FFD700;
-  --gold-glow: #FFA500;
-  --flame-yellow: #FFE066;
-  --flame-orange: #FF8C00;
-  --flame-red: #FF4500;
-  --pink: #FF69B4;
+  --gold: #E8A838;
+  --gold-glow: #D4922A;
+  --pink: #E8587A;
+  --pink-soft: #F4A0B0;
   --sparkle: #FFFACD;
 }
 
@@ -25,57 +23,68 @@
   --color-cream: var(--cream);
   --color-gold: var(--gold);
   --color-gold-glow: var(--gold-glow);
-  --color-flame-yellow: var(--flame-yellow);
-  --color-flame-orange: var(--flame-orange);
-  --color-flame-red: var(--flame-red);
   --color-pink: var(--pink);
+  --color-pink-soft: var(--pink-soft);
   --color-sparkle: var(--sparkle);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
 }
 
 html {
-  /* WHY: dvh accounts for mobile browser chrome (address bar) */
   min-height: 100dvh;
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(170deg, #FFF5ED 0%, #FFE8D6 40%, #FDDCC4 100%);
   color: var(--foreground);
-  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  font-family: var(--font-sans), system-ui, sans-serif;
   overflow-x: hidden;
   min-height: 100dvh;
-  /* WHY: safe-area for notched phones */
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Sparkle particles floating in background */
+/* Sparkle particles */
 @keyframes float-up {
   0% {
-    transform: translateY(100vh) scale(0);
+    transform: translateY(100vh) scale(0) rotate(0deg);
     opacity: 0;
   }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
+  10% { opacity: 0.8; }
+  50% { opacity: 1; }
+  90% { opacity: 0.6; }
   100% {
-    transform: translateY(-10vh) scale(1);
+    transform: translateY(-10vh) scale(1) rotate(360deg);
     opacity: 0;
   }
 }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
 .sparkle-particle {
   position: fixed;
-  width: 4px;
-  height: 4px;
-  background: var(--gold);
   border-radius: 50%;
   pointer-events: none;
-  animation: float-up 8s linear infinite, twinkle 2s ease-in-out infinite;
   z-index: 0;
+}
+
+.sparkle-gold {
+  background: radial-gradient(circle, #FFD700, #E8A838);
+  animation: float-up var(--dur) linear infinite, twinkle 2.5s ease-in-out infinite;
+  box-shadow: 0 0 4px rgba(232, 168, 56, 0.4);
+}
+
+.sparkle-pink {
+  background: radial-gradient(circle, #F4A0B0, #E8587A);
+  animation: float-up var(--dur) linear infinite, twinkle 3s ease-in-out infinite;
+  box-shadow: 0 0 4px rgba(232, 88, 122, 0.3);
+}
+
+.sparkle-white {
+  background: radial-gradient(circle, #FFF, #FFE8D6);
+  animation: float-up var(--dur) linear infinite, twinkle 2s ease-in-out infinite;
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
 }

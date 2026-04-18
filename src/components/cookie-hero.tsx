@@ -37,113 +37,154 @@ export function CookieHero() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-5 select-none w-full max-w-md mx-auto px-5">
+    <motion.div
+      className="flex flex-col items-center gap-6 select-none w-full max-w-md mx-auto px-5"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
       {/* Title */}
       <div className="text-center">
-        <motion.h1
-          className="text-2xl font-bold text-cookie-dark leading-tight"
-          animate={{ scale: [1, 1.02, 1] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        <motion.p
+          className="text-sm font-medium tracking-[0.2em] uppercase text-cookie-brown/60"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
         >
-          ¡Feliz cumpleaños #18
+          feliz cumpleaños
+        </motion.p>
+        <motion.h1
+          className="text-5xl font-black text-pink mt-1"
+          style={{ fontFamily: "var(--font-display)" }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+        >
+          Cuki
         </motion.h1>
         <motion.p
-          className="text-4xl font-bold text-pink mt-1"
-          animate={{ scale: [1, 1.02, 1] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+          className="text-lg font-bold text-gold mt-0.5"
+          style={{ fontFamily: "var(--font-display)" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
         >
-          Cuki!
+          #18
         </motion.p>
       </div>
 
       {/* Cake */}
-      <BirthdayCake candlesLit={candlesLit} totalCandles={TOTAL_CANDLES} />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.6 }}
+      >
+        <BirthdayCake candlesLit={candlesLit} totalCandles={TOTAL_CANDLES} />
+      </motion.div>
 
-      {/* Flow: 1) Start music → 2) Enable mic → 3) Blow */}
-      {!musicStarted ? (
-        <button
-          className="w-full max-w-xs h-14 rounded-full bg-pink text-white font-semibold text-lg shadow-lg active:bg-pink/80 transition-colors"
-          onTouchEnd={(e) => { e.preventDefault(); handleStartMusic(); }}
-          onClick={handleStartMusic}
-        >
-          🎵 Tocá para escuchar
-        </button>
-      ) : micState === "idle" ? (
-        <div className="flex flex-col items-center gap-3 w-full">
-          <p className="text-sm text-cookie-dark/60">
-            ¡Ahora soplá las velas!
-          </p>
+      {/* Actions */}
+      <motion.div
+        className="flex flex-col items-center gap-3 w-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+      >
+        {!musicStarted ? (
           <button
-            className="w-full max-w-xs h-14 rounded-full bg-cookie-brown text-white font-semibold text-lg shadow-lg active:bg-cookie-dark transition-colors"
-            onTouchEnd={(e) => { e.preventDefault(); startMic(); }}
-            onClick={startMic}
+            className="w-full max-w-xs h-14 rounded-full font-semibold text-base shadow-lg transition-all active:scale-95"
+            style={{
+              background: "linear-gradient(135deg, #E8587A, #D44060)",
+              color: "white",
+              boxShadow: "0 4px 20px rgba(232,88,122,0.35)",
+            }}
+            onTouchEnd={(e) => { e.preventDefault(); handleStartMusic(); }}
+            onClick={handleStartMusic}
           >
-            🎤 Activar micrófono
+            🎵 Tocá para escuchar
           </button>
-        </div>
-      ) : micState === "active" ? (
-        <div className="flex flex-col items-center gap-3 w-full">
-          <motion.div
-            className="flex items-center gap-2 text-sm text-cookie-dark/70"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
-            Escuchando... ¡soplá las velas!
-          </motion.div>
-
-          <p className="text-sm text-cookie-dark/60">
-            {candlesLit} vela{candlesLit !== 1 ? "s" : ""} restante{candlesLit !== 1 ? "s" : ""}
-          </p>
-
-          {/* Tap fallback */}
-          <button
-            className="text-xs text-cookie-dark/40 underline active:text-cookie-dark/60 min-h-[44px] flex items-center"
-            onTouchEnd={(e) => { e.preventDefault(); handleTapBlow(); }}
-            onClick={handleTapBlow}
-          >
-            o tocá aquí para soplar
-          </button>
-
-          {candlesLit > 0 && candlesLit < 10 && (
+        ) : micState === "idle" ? (
+          <>
+            <p className="text-sm text-cookie-dark/50 font-medium">
+              ¡Ahora soplá las velas!
+            </p>
             <button
-              className="text-xs text-cookie-dark/30 underline active:text-cookie-dark/50 min-h-[44px] flex items-center"
-              onTouchEnd={(e) => { e.preventDefault(); blowAllCandles(); }}
-              onClick={blowAllCandles}
+              className="w-full max-w-xs h-14 rounded-full font-semibold text-base shadow-lg transition-all active:scale-95"
+              style={{
+                background: "linear-gradient(135deg, #B8784A, #8A5530)",
+                color: "white",
+                boxShadow: "0 4px 20px rgba(138,85,48,0.3)",
+              }}
+              onTouchEnd={(e) => { e.preventDefault(); startMic(); }}
+              onClick={startMic}
             >
-              apagar todas
+              🎤 Activar micrófono
             </button>
-          )}
-        </div>
-      ) : (
-        /* Mic denied — tap-only fallback */
-        <div className="flex flex-col items-center gap-3 w-full">
-          <p className="text-sm text-cookie-dark/60">
-            Micrófono no disponible — ¡tocá para soplar!
-          </p>
-          <p className="text-sm text-cookie-dark/60">
-            {candlesLit} vela{candlesLit !== 1 ? "s" : ""} restante{candlesLit !== 1 ? "s" : ""}
-          </p>
+          </>
+        ) : micState === "active" ? (
+          <>
+            <motion.div
+              className="flex items-center gap-2 text-sm font-medium text-cookie-dark/60"
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]" />
+              Escuchando... ¡soplá las velas!
+            </motion.div>
 
-          <button
-            className="w-full max-w-xs h-14 rounded-full bg-cookie-brown text-white font-semibold text-lg shadow-lg active:bg-cookie-dark active:scale-95 transition-all"
-            onTouchEnd={(e) => { e.preventDefault(); handleTapBlow(); }}
-            onClick={handleTapBlow}
-          >
-            Tocá para soplar 💨
-          </button>
+            <p className="text-xs text-cookie-dark/40">
+              {candlesLit} vela{candlesLit !== 1 ? "s" : ""} restante{candlesLit !== 1 ? "s" : ""}
+            </p>
 
-          {candlesLit > 0 && candlesLit < 10 && (
             <button
-              className="text-xs text-cookie-dark/30 underline active:text-cookie-dark/50 min-h-[44px] flex items-center"
-              onTouchEnd={(e) => { e.preventDefault(); blowAllCandles(); }}
-              onClick={blowAllCandles}
+              className="text-xs text-cookie-dark/35 underline decoration-dotted active:text-cookie-dark/55 min-h-[44px] flex items-center"
+              onTouchEnd={(e) => { e.preventDefault(); handleTapBlow(); }}
+              onClick={handleTapBlow}
             >
-              apagar todas
+              o tocá aquí para soplar
             </button>
-          )}
-        </div>
-      )}
-    </div>
+
+            {candlesLit > 0 && candlesLit < 10 && (
+              <button
+                className="text-[10px] text-cookie-dark/25 active:text-cookie-dark/40 min-h-[36px] flex items-center"
+                onTouchEnd={(e) => { e.preventDefault(); blowAllCandles(); }}
+                onClick={blowAllCandles}
+              >
+                apagar todas
+              </button>
+            )}
+          </>
+        ) : (
+          <>
+            <p className="text-sm text-cookie-dark/50 font-medium text-center">
+              Micrófono no disponible
+            </p>
+            <p className="text-xs text-cookie-dark/40">
+              {candlesLit} vela{candlesLit !== 1 ? "s" : ""} restante{candlesLit !== 1 ? "s" : ""}
+            </p>
+            <button
+              className="w-full max-w-xs h-14 rounded-full font-semibold text-base shadow-lg transition-all active:scale-95"
+              style={{
+                background: "linear-gradient(135deg, #B8784A, #8A5530)",
+                color: "white",
+                boxShadow: "0 4px 20px rgba(138,85,48,0.3)",
+              }}
+              onTouchEnd={(e) => { e.preventDefault(); handleTapBlow(); }}
+              onClick={handleTapBlow}
+            >
+              Tocá para soplar 💨
+            </button>
+            {candlesLit > 0 && candlesLit < 10 && (
+              <button
+                className="text-[10px] text-cookie-dark/25 active:text-cookie-dark/40 min-h-[36px] flex items-center"
+                onTouchEnd={(e) => { e.preventDefault(); blowAllCandles(); }}
+                onClick={blowAllCandles}
+              >
+                apagar todas
+              </button>
+            )}
+          </>
+        )}
+      </motion.div>
+    </motion.div>
   );
 }
