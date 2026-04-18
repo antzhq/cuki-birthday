@@ -34,11 +34,20 @@
   --font-mono: var(--font-geist-mono);
 }
 
+html {
+  /* WHY: dvh accounts for mobile browser chrome (address bar) */
+  min-height: 100dvh;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans, Arial, Helvetica, sans-serif);
   overflow-x: hidden;
+  min-height: 100dvh;
+  /* WHY: safe-area for notched phones */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Sparkle particles floating in background */
@@ -47,12 +56,8 @@ body {
     transform: translateY(100vh) scale(0);
     opacity: 0;
   }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
   100% {
     transform: translateY(-10vh) scale(1);
     opacity: 0;
@@ -65,18 +70,10 @@ body {
 }
 
 @keyframes candle-flicker {
-  0%, 100% {
-    transform: scaleY(1) scaleX(1) translateY(0);
-  }
-  25% {
-    transform: scaleY(1.1) scaleX(0.9) translateY(-1px);
-  }
-  50% {
-    transform: scaleY(0.95) scaleX(1.05) translateY(1px);
-  }
-  75% {
-    transform: scaleY(1.05) scaleX(0.95) translateY(-0.5px);
-  }
+  0%, 100% { transform: scaleY(1) scaleX(1) translateY(0); }
+  25% { transform: scaleY(1.1) scaleX(0.9) translateY(-1px); }
+  50% { transform: scaleY(0.95) scaleX(1.05) translateY(1px); }
+  75% { transform: scaleY(1.05) scaleX(0.95) translateY(-0.5px); }
 }
 
 .sparkle-particle {

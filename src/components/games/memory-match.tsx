@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useBirthdayStore } from "@/lib/store";
 import { MEMORY_ICONS } from "@/lib/constants";
 import { UnlockAnimation } from "../unlock-animation";
+import { NavBar } from "../nav-bar";
 
 interface Card {
   id: number;
@@ -96,31 +97,26 @@ export function MemoryMatch() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <div className="flex items-center justify-between w-full">
-        <button
-          className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
-          onClick={exitGame}
-        >
-          ← Volver
-        </button>
-        <h2 className="text-xl font-bold text-cookie-dark">🧠 Memoria</h2>
-        <span className="text-sm text-cookie-dark/50">{moves} intentos</span>
-      </div>
+      <NavBar
+        title="🧠 Memoria"
+        onBack={exitGame}
+        right={<span className="text-xs text-cookie-dark/50">{moves} intentos</span>}
+      />
 
-      <p className="text-sm text-cookie-dark/60">¡Encontrá todas las parejas!</p>
+      <p className="text-sm text-cookie-dark/60 -mt-2">¡Encontrá todas las parejas!</p>
 
-      <div className="grid grid-cols-4 gap-2 w-full max-w-xs">
+      <div className="grid grid-cols-4 gap-2 w-full">
         {cards.map((card) => {
           const isFlipped = flipped.includes(card.id) || card.matched;
           return (
             <motion.button
               key={card.id}
-              className={`aspect-square rounded-lg text-2xl flex items-center justify-center font-bold transition-colors ${
+              className={`aspect-square rounded-xl text-2xl flex items-center justify-center font-bold transition-colors min-h-[60px] ${
                 card.matched
                   ? "bg-green-100 border-2 border-green-300"
                   : isFlipped
                   ? "bg-cream border-2 border-gold"
-                  : "bg-cookie-brown/20 border-2 border-cookie-light hover:bg-cookie-brown/30"
+                  : "bg-cookie-brown/20 border-2 border-cookie-light active:bg-cookie-brown/30"
               }`}
               onClick={() => handleFlip(card.id)}
               whileTap={{ scale: 0.9 }}

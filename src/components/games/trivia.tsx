@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useBirthdayStore } from "@/lib/store";
 import { TRIVIA_QUESTIONS } from "@/lib/constants";
 import { UnlockAnimation } from "../unlock-animation";
+import { NavBar } from "../nav-bar";
 
 export function Trivia() {
   const { completeGame, exitGame } = useBirthdayStore();
@@ -47,7 +48,7 @@ export function Trivia() {
   if (showResult) {
     return (
       <motion.div
-        className="flex flex-col items-center gap-4"
+        className="flex flex-col items-center gap-5 w-full"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
@@ -68,9 +69,8 @@ export function Trivia() {
             : "¡Igual desbloqueaste las fotos!"}
         </p>
         <motion.button
-          className="px-6 py-2 rounded-full bg-cookie-brown text-white font-medium shadow-md"
+          className="w-full h-12 rounded-full bg-cookie-brown text-white font-medium shadow-md active:bg-cookie-dark"
           onClick={handleFinish}
-          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           ¡Reclamar fotos! 🔓
@@ -85,20 +85,18 @@ export function Trivia() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <div className="flex items-center justify-between w-full">
-        <button
-          className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
-          onClick={exitGame}
-        >
-          ← Volver
-        </button>
-        <h2 className="text-xl font-bold text-cookie-dark">❓ Trivia de Cuki</h2>
-        <span className="text-sm text-cookie-dark/50">
-          {currentQ + 1}/{TRIVIA_QUESTIONS.length}
-        </span>
-      </div>
+      <NavBar
+        title="❓ Trivia de Cuki"
+        onBack={exitGame}
+        right={
+          <span className="text-xs text-cookie-dark/50">
+            {currentQ + 1}/{TRIVIA_QUESTIONS.length}
+          </span>
+        }
+      />
 
-      <div className="w-full h-2 bg-cookie-light/30 rounded-full overflow-hidden">
+      {/* Progress bar */}
+      <div className="w-full h-1.5 bg-cookie-light/30 rounded-full overflow-hidden -mt-2">
         <motion.div
           className="h-full bg-gold rounded-full"
           animate={{
@@ -111,18 +109,18 @@ export function Trivia() {
         <motion.div
           key={currentQ}
           className="w-full flex flex-col gap-3"
-          initial={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -50 }}
-          transition={{ duration: 0.3 }}
+          exit={{ opacity: 0, x: -40 }}
+          transition={{ duration: 0.25 }}
         >
-          <p className="text-lg font-semibold text-cookie-dark text-center py-2">
+          <p className="text-base font-semibold text-cookie-dark text-center py-3">
             {question.question}
           </p>
 
           <div className="flex flex-col gap-2">
             {question.options.map((option, i) => {
-              let bg = "bg-white border-cookie-light hover:border-gold";
+              let bg = "bg-white border-cookie-light active:border-gold";
               if (selected !== null) {
                 if (i === question.correctIndex) {
                   bg = "bg-green-100 border-green-400";
@@ -134,7 +132,7 @@ export function Trivia() {
               return (
                 <motion.button
                   key={i}
-                  className={`w-full p-3 rounded-xl border-2 text-left text-sm font-medium text-cookie-dark transition-colors ${bg}`}
+                  className={`w-full p-3.5 rounded-xl border-2 text-left text-sm font-medium text-cookie-dark transition-colors min-h-[48px] ${bg}`}
                   onClick={() => handleAnswer(i)}
                   disabled={selected !== null}
                   whileTap={{ scale: 0.97 }}

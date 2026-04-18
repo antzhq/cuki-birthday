@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useBirthdayStore } from "@/lib/store";
 import { UnlockAnimation } from "../unlock-animation";
+import { NavBar } from "../nav-bar";
 
 const SIZE = 3;
 const TOTAL_TILES = SIZE * SIZE;
@@ -102,25 +103,18 @@ export function SlidingPuzzle() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <div className="flex items-center justify-between w-full">
-        <button
-          className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
-          onClick={exitGame}
-        >
-          ← Volver
-        </button>
-        <h2 className="text-xl font-bold text-cookie-dark">
-          🧩 Rompecabezas
-        </h2>
-        <span className="text-sm text-cookie-dark/50">{moves} movimientos</span>
-      </div>
+      <NavBar
+        title="🧩 Rompecabezas"
+        onBack={exitGame}
+        right={<span className="text-xs text-cookie-dark/50">{moves} mov.</span>}
+      />
 
-      <p className="text-sm text-cookie-dark/60">
-        ¡Tocá una pieza junto al espacio vacío para moverla!
+      <p className="text-sm text-cookie-dark/60 -mt-2">
+        ¡Tocá una pieza junto al espacio vacío!
       </p>
 
       <div
-        className="grid gap-1 w-full max-w-xs mx-auto"
+        className="grid gap-1.5 w-full"
         style={{ gridTemplateColumns: `repeat(${SIZE}, 1fr)` }}
       >
         {board.map((tile, index) => {
@@ -130,11 +124,11 @@ export function SlidingPuzzle() {
           return (
             <motion.button
               key={tile}
-              className={`aspect-square rounded-lg text-2xl flex items-center justify-center font-bold transition-colors ${
+              className={`aspect-square rounded-xl text-3xl flex items-center justify-center font-bold transition-colors min-h-[80px] ${
                 isEmptyTile
                   ? "bg-transparent"
                   : isAdjacent
-                  ? "bg-cookie-light border-2 border-gold cursor-pointer hover:bg-gold/20"
+                  ? "bg-cookie-light border-2 border-gold active:bg-gold/20"
                   : "bg-cookie-light border-2 border-cookie-brown/20"
               }`}
               onClick={() => handleTileClick(index)}

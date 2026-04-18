@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useBirthdayStore } from "@/lib/store";
 import { BIRTH_YEAR, CURRENT_YEAR, GUESS_YEAR_ANSWER } from "@/lib/constants";
 import { UnlockAnimation } from "../unlock-animation";
+import { NavBar } from "../nav-bar";
 import Image from "next/image";
 
 export function GuessTheYear() {
@@ -33,36 +34,24 @@ export function GuessTheYear() {
 
   return (
     <motion.div
-      className="flex flex-col items-center gap-5 w-full"
+      className="flex flex-col items-center gap-4 w-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <div className="flex items-center justify-between w-full">
-        <button
-          className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
-          onClick={exitGame}
-        >
-          ← Volver
-        </button>
-        <h2 className="text-xl font-bold text-cookie-dark">
-          📅 Adiviná el Año
-        </h2>
-        <div />
-      </div>
+      <NavBar title="📅 Adiviná el Año" onBack={exitGame} />
 
-      <p className="text-sm text-cookie-dark/60 text-center">
-        ¿Cuándo se tomó esta foto? Deslizá para adivinar — ¡la foto se aclara
-        cuando te acercás!
+      <p className="text-sm text-cookie-dark/60 text-center -mt-2">
+        Deslizá para adivinar — ¡la foto se aclara cuando te acercás!
       </p>
 
-      <div className="relative w-full max-w-xs aspect-square rounded-xl overflow-hidden shadow-lg">
+      <div className="relative w-full aspect-square rounded-xl overflow-hidden shadow-lg">
         <Image
           src="/photos/CumpleCuki5.jpg"
           alt="Adiviná cuándo se tomó"
           fill
           className="object-cover transition-all duration-300"
           style={{ filter: `blur(${blurAmount}px)` }}
-          sizes="320px"
+          sizes="(max-width: 448px) 100vw, 448px"
         />
         {submitted && (
           <motion.div
@@ -70,12 +59,13 @@ export function GuessTheYear() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <span className="text-4xl">🎉</span>
+            <span className="text-5xl">🎉</span>
           </motion.div>
         )}
       </div>
 
-      <div className="w-full max-w-xs flex flex-col gap-2">
+      {/* Year slider */}
+      <div className="w-full flex flex-col gap-2">
         <input
           type="range"
           min={BIRTH_YEAR}
@@ -83,11 +73,11 @@ export function GuessTheYear() {
           value={guess}
           onChange={(e) => setGuess(Number(e.target.value))}
           disabled={submitted}
-          className="w-full accent-cookie-brown"
+          className="w-full accent-cookie-brown h-2"
         />
         <div className="flex justify-between text-xs text-cookie-dark/50">
           <span>{BIRTH_YEAR}</span>
-          <span className="text-lg font-bold text-cookie-dark">{guess}</span>
+          <span className="text-xl font-bold text-cookie-dark">{guess}</span>
           <span>{CURRENT_YEAR}</span>
         </div>
       </div>
@@ -105,14 +95,13 @@ export function GuessTheYear() {
       )}
 
       <motion.button
-        className={`px-6 py-2 rounded-full font-medium shadow-md transition-colors ${
+        className={`w-full h-12 rounded-full font-medium shadow-md transition-colors ${
           isCorrect
-            ? "bg-green-500 text-white hover:bg-green-600"
-            : "bg-cookie-brown/30 text-cookie-dark/50 cursor-not-allowed"
+            ? "bg-green-500 text-white active:bg-green-600"
+            : "bg-cookie-brown/30 text-cookie-dark/50"
         }`}
         onClick={handleSubmit}
         disabled={!isCorrect || submitted}
-        whileHover={isCorrect ? { scale: 1.05 } : {}}
         whileTap={isCorrect ? { scale: 0.95 } : {}}
       >
         {isCorrect ? "¡Confirmar! ✓" : "Deslizá al año correcto"}

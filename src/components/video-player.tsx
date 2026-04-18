@@ -2,21 +2,23 @@
 
 import { motion } from "framer-motion";
 import { useBirthdayStore } from "@/lib/store";
+import { NavBar } from "./nav-bar";
 
 export function VideoPlayer() {
-  const { setPhase, relightCandles, goToGallery, hasVisitedGallery } =
-    useBirthdayStore();
+  const { relightCandles, goToGallery } = useBirthdayStore();
 
   return (
     <motion.div
-      className="flex flex-col items-center gap-6 w-full"
-      initial={{ opacity: 0, scale: 0.9 }}
+      className="flex flex-col items-center gap-4 w-full"
+      initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.4 }}
     >
-      <h2 className="text-2xl font-bold text-cookie-dark text-center">
-        🎉 ¡Las apagaste todas!
-      </h2>
+      <NavBar
+        title="🎉 ¡Las apagaste todas!"
+        onBack={relightCandles}
+        backLabel="← Velas"
+      />
 
       <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-xl bg-cookie-dark/10">
         <video
@@ -25,30 +27,19 @@ export function VideoPlayer() {
           autoPlay
           preload="metadata"
           poster="/video/poster.jpg"
-          onEnded={() => setPhase("gallery")}
         >
           <source src="/video/birthday.mp4" type="video/mp4" />
           Tu navegador no soporta video.
         </video>
       </div>
 
-      <div className="flex items-center gap-4">
-        <button
-          className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
-          onClick={relightCandles}
-        >
-          ← Volver a las velas
-        </button>
-
-        <motion.button
-          className="px-6 py-2 rounded-full bg-cookie-brown text-white font-medium shadow-md hover:bg-cookie-dark transition-colors"
-          onClick={goToGallery}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Ir a la Galería →
-        </motion.button>
-      </div>
+      <motion.button
+        className="w-full h-12 rounded-full bg-cookie-brown text-white font-medium shadow-md active:bg-cookie-dark transition-colors"
+        onClick={goToGallery}
+        whileTap={{ scale: 0.95 }}
+      >
+        Ir a la Galería →
+      </motion.button>
     </motion.div>
   );
 }

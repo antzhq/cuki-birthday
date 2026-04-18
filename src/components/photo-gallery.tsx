@@ -5,6 +5,7 @@ import { useBirthdayStore } from "@/lib/store";
 import { PHOTO_FILES, PHOTO_CAPTIONS, TOTAL_PHOTOS } from "@/lib/constants";
 import { PhotoCard } from "./photo-card";
 import { GameMenu } from "./game-menu";
+import { NavBar } from "./nav-bar";
 
 export function PhotoGallery() {
   const { unlockedPhotos, completedGames, setPhase, relightCandles } =
@@ -12,35 +13,31 @@ export function PhotoGallery() {
 
   return (
     <motion.div
-      className="flex flex-col items-center gap-6 w-full"
+      className="flex flex-col items-center gap-4 w-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.4 }}
     >
-      <div className="flex items-center justify-between w-full">
-        <button
-          className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
-          onClick={() => setPhase("video")}
-        >
-          ← Video
-        </button>
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-cookie-dark">
-            Galería de Cuki
-          </h2>
-          <p className="text-sm text-cookie-dark/60 mt-1">
-            {unlockedPhotos.length} / {TOTAL_PHOTOS} fotos desbloqueadas
-          </p>
-        </div>
-        <button
-          className="text-sm text-cookie-dark/50 hover:text-cookie-dark"
-          onClick={relightCandles}
-        >
-          🕯️ Velas
-        </button>
-      </div>
+      <NavBar
+        title="Galería de Cuki"
+        onBack={() => setPhase("video")}
+        backLabel="← Video"
+        right={
+          <button
+            className="text-sm text-cookie-dark/50 active:text-cookie-dark min-h-[44px] flex items-center"
+            onClick={relightCandles}
+          >
+            🕯️
+          </button>
+        }
+      />
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 w-full">
+      <p className="text-sm text-cookie-dark/60 -mt-2">
+        {unlockedPhotos.length} / {TOTAL_PHOTOS} fotos desbloqueadas
+      </p>
+
+      {/* Photo grid — 3 columns on mobile */}
+      <div className="grid grid-cols-3 gap-1.5 w-full">
         {PHOTO_FILES.map((src, i) => (
           <PhotoCard
             key={i}
@@ -53,8 +50,8 @@ export function PhotoGallery() {
       </div>
 
       {completedGames.length < 4 && (
-        <div className="w-full mt-4">
-          <h3 className="text-lg font-semibold text-cookie-dark text-center mb-3">
+        <div className="w-full mt-2">
+          <h3 className="text-base font-semibold text-cookie-dark text-center mb-3">
             ¡Jugá para desbloquear más! 🎮
           </h3>
           <GameMenu />

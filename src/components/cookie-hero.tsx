@@ -28,32 +28,33 @@ export function CookieHero() {
 
   return (
     <motion.div
-      className="flex flex-col items-center gap-6 select-none"
-      initial={{ opacity: 0, y: 30 }}
+      className="flex flex-col items-center gap-5 select-none w-full"
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <motion.h1
-        className="text-3xl sm:text-4xl font-bold text-cookie-dark text-center"
+        className="text-2xl font-bold text-cookie-dark text-center leading-tight"
         animate={{ scale: [1, 1.02, 1] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       >
         ¡Feliz cumpleaños #18
         <br />
-        <span className="text-4xl sm:text-5xl text-pink">Cuki!</span>
+        <span className="text-4xl text-pink">Cuki!</span>
       </motion.h1>
 
+      {/* Cookie */}
       <div className="relative">
         <motion.div
-          className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full shadow-2xl flex items-center justify-center"
+          className="relative w-56 h-56 rounded-full shadow-2xl flex items-center justify-center"
           style={{
             background:
               "radial-gradient(circle at 40% 40%, #E8C99B, #C68B59 50%, #8B5E3C 100%)",
             boxShadow:
               "inset 0 -4px 8px rgba(0,0,0,0.2), 0 8px 32px rgba(139,94,60,0.4)",
           }}
-          whileHover={{ scale: 1.02 }}
         >
+          {/* Chocolate chips */}
           {[
             { top: "25%", left: "30%", size: 12 },
             { top: "40%", left: "55%", size: 14 },
@@ -79,7 +80,8 @@ export function CookieHero() {
             />
           ))}
 
-          <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex items-end gap-1">
+          {/* Candles */}
+          <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex items-end gap-0.5">
             {candles.map((i) => (
               <Candle key={i} index={i} lit={i < candlesLit} />
             ))}
@@ -87,21 +89,20 @@ export function CookieHero() {
         </motion.div>
       </div>
 
+      {/* Actions */}
       {phase === "landing" && (
-        <div className="flex flex-col items-center gap-3 mt-4">
+        <div className="flex flex-col items-center gap-3 w-full">
           <motion.button
-            className="px-8 py-3 rounded-full bg-cookie-brown text-white font-semibold text-lg shadow-lg hover:bg-cookie-dark transition-colors"
+            className="w-full max-w-xs h-12 rounded-full bg-cookie-brown text-white font-semibold text-base shadow-lg active:bg-cookie-dark transition-colors"
             onClick={() => setPhase("blowing")}
-            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             ¡Pedí un deseo y soplá! 🌬️
           </motion.button>
 
-          {/* If she's already been through the flow, let her jump to gallery */}
           {hasVisitedGallery && (
             <button
-              className="text-sm text-cookie-dark/50 underline hover:text-cookie-dark/70"
+              className="text-sm text-cookie-dark/50 active:text-cookie-dark/70 min-h-[44px]"
               onClick={goToGallery}
             >
               Ir a la galería →
@@ -111,7 +112,7 @@ export function CookieHero() {
       )}
 
       {phase === "blowing" && (
-        <div className="flex flex-col items-center gap-3 mt-4">
+        <div className="flex flex-col items-center gap-3 w-full">
           <BlowDetector onBlow={handleBlow} />
 
           <p className="text-sm text-cookie-dark/60 text-center">
@@ -119,16 +120,16 @@ export function CookieHero() {
           </p>
 
           <motion.button
-            className="px-6 py-2 rounded-full bg-gold/20 text-cookie-dark font-medium text-sm border border-gold/40 hover:bg-gold/30 transition-colors"
+            className="w-full max-w-xs h-12 rounded-full bg-gold/20 text-cookie-dark font-medium text-sm border border-gold/40 active:bg-gold/30 transition-colors"
             onClick={handleBlow}
-            whileTap={{ scale: 0.9 }}
+            whileTap={{ scale: 0.95 }}
           >
             Tocá para soplar 💨
           </motion.button>
 
           {candlesLit > 0 && candlesLit < 15 && (
             <button
-              className="text-xs text-cookie-dark/40 underline hover:text-cookie-dark/60"
+              className="text-xs text-cookie-dark/40 underline active:text-cookie-dark/60 min-h-[44px] flex items-center"
               onClick={blowAllCandles}
             >
               apagar todas
