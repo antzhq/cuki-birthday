@@ -69,13 +69,6 @@ body {
   50% { opacity: 1; }
 }
 
-@keyframes candle-flicker {
-  0%, 100% { transform: scaleY(1) scaleX(1) translateY(0); }
-  25% { transform: scaleY(1.1) scaleX(0.9) translateY(-1px); }
-  50% { transform: scaleY(0.95) scaleX(1.05) translateY(1px); }
-  75% { transform: scaleY(1.05) scaleX(0.95) translateY(-0.5px); }
-}
-
 .sparkle-particle {
   position: fixed;
   width: 4px;
