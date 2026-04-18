@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { PHOTO_FILES } from "@/lib/constants";
 import { useBirthdayStore } from "@/lib/store";
@@ -13,108 +13,114 @@ interface PhotoState {
   vx: number;
   vy: number;
   rotation: number;
-  width: number;
-  height: number;
-  dropped: boolean;
+  phase: "dropping" | "floating";
 }
 
-const PHOTO_SIZE = 100;
-const GRAVITY = 0.4;
-const BOUNCE_DAMPING = 0.7;
-const FRICTION = 0.995;
+const PHOTO_SIZE = 140;
+const GRAVITY = 0.5;
+const FLOAT_SPEED = 1.5;
 
 export function FloatingPhotos() {
   const reset = useBirthdayStore((s) => s.reset);
   const [photos, setPhotos] = useState<PhotoState[]>([]);
-  const [dimensions, setDimensions] = useState({ w: 0, h: 0 });
-  const animRef = useRef<number>(0);
   const photosRef = useRef<PhotoState[]>([]);
+  const animRef = useRef<number>(0);
+  const dimsRef = useRef({ w: 0, h: 0 });
 
-  // Initialize dimensions
+  // Init
   useEffect(() => {
-    setDimensions({ w: window.innerWidth, h: window.innerHeight });
-    const handleResize = () => {
-      setDimensions({ w: window.innerWidth, h: window.innerHeight });
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    dimsRef.current = { w, h };
 
-  // Drop photos one by one from top
-  useEffect(() => {
-    if (dimensions.w === 0) return;
-
-    const newPhotos: PhotoState[] = PHOTO_FILES.map((_, i) => ({
+    // WHY: Each photo starts above the screen at staggered heights
+    // so they drop in one by one. Random horizontal velocity for spread.
+    const initial: PhotoState[] = PHOTO_FILES.map((_, i) => ({
       id: i,
-      x: Math.random() * (dimensions.w - PHOTO_SIZE),
-      y: -PHOTO_SIZE - Math.random() * 400 - i * 80,
-      vx: (Math.random() - 0.5) * 3,
+      x: Math.random() * (w - PHOTO_SIZE),
+      y: -PHOTO_SIZE - i * 120 - Math.random() * 100,
+      vx: (Math.random() - 0.5) * 2,
       vy: 0,
-      rotation: (Math.random() - 0.5) * 30,
-      width: PHOTO_SIZE,
-      height: PHOTO_SIZE,
-      dropped: false,
+      rotation: (Math.random() - 0.5) * 20,
+      phase: "dropping" as const,
     }));
 
-    setPhotos(newPhotos);
-    photosRef.current = newPhotos;
-  }, [dimensions.w]);
+    photosRef.current = initial;
+    setPhotos(initial);
 
-  // Physics loop
-  const animate = useCallback(() => {
-    const { w, h } = dimensions;
-    if (w === 0) return;
+    const tick = () => {
+      const { w, h } = dimsRef.current;
 
-    photosRef.current = photosRef.current.map((p) => {
-      let { x, y, vx, vy, rotation } = p;
+      photosRef.current = photosRef.current.map((p) => {
+        let { x, y, vx, vy, rotation, phase } = p;
 
-      // Gravity
-      vy += GRAVITY;
+        if (phase === "dropping") {
+          // Gravity drop
+          vy += GRAVITY;
+          y += vy;
+          x += vx;
 
-      // Apply velocity
-      x += vx;
-      y += vy;
+          // Hit the floor → bounce once then switch to floating
+          if (y + PHOTO_SIZE >= h) {
+            y = h - PHOTO_SIZE;
+            // Assign a random floating velocity
+            vx = (Math.random() - 0.5) * FLOAT_SPEED * 2;
+            vy = -(Math.random() * FLOAT_SPEED + 0.5);
+            phase = "floating";
+          }
+        } else {
+          // Floating mode — constant velocity, bounce off all walls like a screensaver
+          x += vx;
+          y += vy;
 
-      // Floor bounce
-      if (y + PHOTO_SIZE > h) {
-        y = h - PHOTO_SIZE;
-        vy = -vy * BOUNCE_DAMPING;
-        vx *= 0.9;
-        if (Math.abs(vy) < 1) vy = 0;
-      }
+          // Bounce off floor
+          if (y + PHOTO_SIZE > h) {
+            y = h - PHOTO_SIZE;
+            vy = -Math.abs(vy);
+          }
+          // Bounce off ceiling
+          if (y < 0) {
+            y = 0;
+            vy = Math.abs(vy);
+          }
+          // Bounce off right wall
+          if (x + PHOTO_SIZE > w) {
+            x = w - PHOTO_SIZE;
+            vx = -Math.abs(vx);
+          }
+          // Bounce off left wall
+          if (x < 0) {
+            x = 0;
+            vx = Math.abs(vx);
+          }
+        }
 
-      // Wall bounces
-      if (x < 0) {
-        x = 0;
-        vx = -vx * BOUNCE_DAMPING;
-      }
-      if (x + PHOTO_SIZE > w) {
-        x = w - PHOTO_SIZE;
-        vx = -vx * BOUNCE_DAMPING;
-      }
+        // Gentle rotation from horizontal movement
+        rotation += vx * 0.3;
 
-      // Friction
-      vx *= FRICTION;
+        return { ...p, x, y, vx, vy, rotation, phase };
+      });
 
-      // Rotation based on velocity
-      rotation += vx * 0.5;
+      setPhotos([...photosRef.current]);
+      animRef.current = requestAnimationFrame(tick);
+    };
 
-      return { ...p, x, y, vx, vy, rotation, dropped: y >= 0 };
-    });
+    animRef.current = requestAnimationFrame(tick);
 
-    setPhotos([...photosRef.current]);
-    animRef.current = requestAnimationFrame(animate);
-  }, [dimensions]);
+    const handleResize = () => {
+      dimsRef.current = { w: window.innerWidth, h: window.innerHeight };
+    };
+    window.addEventListener("resize", handleResize);
 
-  useEffect(() => {
-    if (dimensions.w === 0) return;
-    animRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animRef.current);
-  }, [animate, dimensions]);
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 z-20 overflow-hidden">
-      {/* Title overlay */}
+      {/* Title */}
       <motion.div
         className="absolute top-8 left-0 right-0 z-30 text-center"
         initial={{ opacity: 0, y: -20 }}
@@ -129,11 +135,11 @@ export function FloatingPhotos() {
         </p>
       </motion.div>
 
-      {/* Floating photos */}
+      {/* Photos */}
       {photos.map((photo) => (
         <div
           key={photo.id}
-          className="absolute rounded-xl overflow-hidden shadow-lg border-2 border-white"
+          className="absolute rounded-2xl overflow-hidden shadow-xl border-3 border-white"
           style={{
             width: PHOTO_SIZE,
             height: PHOTO_SIZE,
@@ -151,13 +157,13 @@ export function FloatingPhotos() {
         </div>
       ))}
 
-      {/* Relight button */}
+      {/* Replay button */}
       <motion.button
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 px-6 h-10 rounded-full bg-cookie-brown/80 text-white text-sm font-medium shadow-md active:bg-cookie-dark backdrop-blur-sm"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 px-6 h-11 rounded-full bg-cookie-brown/90 text-white text-sm font-medium shadow-lg active:bg-cookie-dark backdrop-blur-sm"
         onClick={reset}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
+        transition={{ delay: 3 }}
         whileTap={{ scale: 0.95 }}
       >
         🕯️ Soplar de nuevo
