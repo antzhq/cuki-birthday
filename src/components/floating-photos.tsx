@@ -16,7 +16,7 @@ interface PhotoState {
   phase: "dropping" | "floating";
 }
 
-const PHOTO_SIZE = 140;
+const PHOTO_SIZE = 180;
 const GRAVITY = 0.5;
 const FLOAT_SPEED = 1.5;
 
