@@ -3,11 +3,20 @@
 import { motion } from "framer-motion";
 import { useBirthdayStore } from "@/lib/store";
 import { BirthdayCake } from "./birthday-cake";
+import { useMusicPlayer } from "./music-player";
 import { TOTAL_CANDLES } from "@/lib/constants";
 
 export function CookieHero() {
   const { candlesLit, musicStarted, startMusic, blowCandle, blowAllCandles } =
     useBirthdayStore();
+  const { play } = useMusicPlayer();
+
+  const handleStartMusic = () => {
+    // WHY: play() must be called in the same synchronous click handler
+    // for iOS to allow audio playback
+    play();
+    startMusic();
+  };
 
   const handleBlow = () => {
     const toExtinguish = Math.min(candlesLit, 2 + Math.floor(Math.random() * 2));
@@ -48,7 +57,7 @@ export function CookieHero() {
       {!musicStarted ? (
         <motion.button
           className="w-full max-w-xs h-12 rounded-full bg-pink text-white font-semibold text-base shadow-lg active:bg-pink/80 transition-colors"
-          onClick={startMusic}
+          onClick={handleStartMusic}
           whileTap={{ scale: 0.95 }}
           animate={{ scale: [1, 1.04, 1] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}

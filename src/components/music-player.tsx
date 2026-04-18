@@ -1,24 +1,22 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useBirthdayStore } from "@/lib/store";
+import { useRef, useCallback } from "react";
 
-export function MusicPlayer() {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const musicStarted = useBirthdayStore((s) => s.musicStarted);
+// WHY: We expose a play function via ref so the button click (user gesture)
+// directly triggers play — iOS requires audio.play() inside the same
+// synchronous call stack as the user interaction.
+export function useMusicPlayer() {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  useEffect(() => {
-    if (musicStarted && audioRef.current) {
-      audioRef.current.play().catch(() => {});
+  const play = useCallback(() => {
+    if (!audioRef.current) {
+      const audio = new Audio("/audio/birthday.mp3");
+      audio.loop = true;
+      audio.volume = 0.7;
+      audioRef.current = audio;
     }
-  }, [musicStarted]);
+    audioRef.current.play().catch(() => {});
+  }, []);
 
-  return (
-    <audio
-      ref={audioRef}
-      src="/audio/birthday.mp3"
-      loop
-      preload="auto"
-    />
-  );
+  return { play };
 }
