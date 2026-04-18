@@ -13,7 +13,7 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
   return (
     <div className="relative flex flex-col items-center">
       {/* Candles */}
-      <div className="flex items-end justify-center gap-[5px] mb-[-2px] relative z-10 px-2">
+      <div className="flex items-end justify-center gap-[6px] mb-[-2px] relative z-10 px-2">
         {candles.map((i) => {
           const lit = i < candlesLit;
           const colors = [
@@ -44,7 +44,7 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
                       transition={{ duration: 0.5 + i * 0.03, repeat: Infinity }}
                     />
                     <motion.div
-                      className="w-[5px] h-[11px]"
+                      className="w-[6px] h-[13px]"
                       style={{
                         background: "linear-gradient(to top, #E8871E, #FFD866, #FFFDE8)",
                         borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%",
@@ -60,7 +60,7 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
               </AnimatePresence>
 
               <div
-                className="w-[4px] h-[20px] rounded-t-sm"
+                className="w-[5px] h-[26px] rounded-t-sm"
                 style={{
                   background: `linear-gradient(180deg, ${color}, ${color}dd)`,
                   boxShadow: `0 0 3px ${color}40`,
@@ -75,7 +75,7 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
       <div className="relative" style={{ filter: "drop-shadow(0 8px 24px rgba(80,40,10,0.18))" }}>
         {/* Top tier */}
         <div
-          className="relative mx-auto w-44 h-9 rounded-t-xl overflow-hidden"
+          className="relative mx-auto w-56 h-12 rounded-t-xl overflow-hidden"
           style={{
             background: "linear-gradient(180deg, #FFF5E8 0%, #FFE0C0 60%, #F5C89A 100%)",
           }}
@@ -85,7 +85,7 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
             style={{ background: "linear-gradient(180deg, transparent 0%, #E8587A 100%)" }}
           />
           {/* Sprinkles */}
-          {[12, 28, 48, 68, 85, 100, 118, 134, 152].map((left, i) => (
+          {[16, 36, 60, 84, 108, 130, 152, 174, 196].map((left, i) => (
             <div
               key={i}
               className="absolute rounded-full"
@@ -101,7 +101,7 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
 
         {/* Middle tier */}
         <div
-          className="relative mx-auto w-52 h-11"
+          className="relative mx-auto w-[272px] h-14"
           style={{
             background: "linear-gradient(180deg, #F4A0B0 0%, #E8587A 100%)",
           }}
@@ -120,7 +120,7 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
 
         {/* Bottom tier */}
         <div
-          className="relative mx-auto w-60 h-[52px] rounded-b-lg"
+          className="relative mx-auto w-[310px] h-[60px] rounded-b-lg"
           style={{
             background: "linear-gradient(180deg, #FFD4A8 0%, #D4A06A 100%)",
           }}
@@ -131,7 +131,7 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
           {/* 18 badge */}
           <div className="absolute inset-0 flex items-center justify-center">
             <span
-              className="text-xl font-black tracking-wider"
+              className="text-2xl font-black tracking-wider"
               style={{
                 fontFamily: "var(--font-display)",
                 color: "rgba(255,255,255,0.85)",
@@ -145,7 +145,7 @@ export function BirthdayCake({ candlesLit, totalCandles }: BirthdayCakeProps) {
 
         {/* Plate / base */}
         <div
-          className="mx-auto w-[264px] h-[6px] rounded-b-2xl"
+          className="mx-auto w-[324px] h-[7px] rounded-b-2xl"
           style={{
             background: "linear-gradient(180deg, #EAEAEA, #D8D8D8)",
             boxShadow: "0 2px 6px rgba(0,0,0,0.08)",

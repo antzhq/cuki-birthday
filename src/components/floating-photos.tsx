@@ -248,24 +248,6 @@ export function FloatingPhotos() {
 
   return (
     <div className="fixed inset-0 z-20 overflow-hidden">
-      {/* Title */}
-      <motion.div
-        className="absolute top-8 left-0 right-0 z-30 text-center pointer-events-none"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.8 }}
-      >
-        <h1
-          className="text-3xl font-black text-pink drop-shadow-sm"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          ¡Felices 18, Cuki!
-        </h1>
-        <p className="text-sm text-cookie-dark/50 mt-1 font-medium">
-          Te quiero mucho, hermanita 💖
-        </p>
-      </motion.div>
-
       {/* Floating photos */}
       {photos.map((photo) => (
         <div

@@ -45,31 +45,22 @@ export function CookieHero() {
     >
       {/* Title */}
       <div className="text-center">
-        <motion.p
-          className="text-sm font-medium tracking-[0.2em] uppercase text-cookie-brown/60"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          feliz cumpleaños
-        </motion.p>
         <motion.h1
-          className="text-5xl font-black text-pink mt-1"
+          className="text-4xl font-black text-pink"
           style={{ fontFamily: "var(--font-display)" }}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+          transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
         >
-          Cuki
+          Feliz Cumple Cuki
         </motion.h1>
         <motion.p
-          className="text-lg font-bold text-gold mt-0.5"
-          style={{ fontFamily: "var(--font-display)" }}
+          className="text-sm text-cookie-dark/55 mt-2 leading-relaxed max-w-[260px] mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.6 }}
         >
-          #18
+          Yo sé que no soy el hermano perfecto pero de verdad te quiero mucho
         </motion.p>
       </div>
 
